@@ -1,0 +1,818 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Word clouds &#8212; The Skywalker Saga</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Word clouds" href="Page_Script.html" />
+    <link rel="prev" title="The Star Wars network" href="Page_Network.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">The Skywalker Saga</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Welcome to the Universie of the Star Wars trilogies movies
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Page_Data_vis.html">
+   The Star Wars data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Page_Network.html">
+   The Star Wars network
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Word clouds
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Page_Script.html">
+   Word clouds
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/Page_NLP.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/MiaMiya/Star_Wars_Trilogies"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/MiaMiya/Star_Wars_Trilogies/issues/new?title=Issue%20on%20page%20%2FPage_NLP.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/MiaMiya/Star_Wars_Trilogies/master?urlpath=tree/docs/Page_NLP.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Word clouds
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#word-clouds-for-alliance-based-on-the-wiki">
+     Word clouds for alliance based on the wiki
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#word-clouds-for-5-main-characters-based-on-wiki">
+     Word clouds for 5 main characters based on wiki
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#part-3-6-hidden-topic-modeling">
+     Part 3.6: Hidden topic modeling
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sentiment-analysis">
+   Sentiment analysis
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">figure</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">FreqDist</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="c1">#from scipy.interpolate import interp1d</span>
+<span class="c1">#from pathlib import Path</span>
+<span class="kn">from</span> <span class="nn">wordcloud</span> <span class="kn">import</span> <span class="n">WordCloud</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">PlaintextCorpusReader</span> <span class="k">as</span> <span class="n">pcr</span>
+<span class="c1">#from nltk.corpus import PlaintextCorpusReader</span>
+<span class="c1">#from nltk.tokenize import WordPunctTokenizer</span>
+<span class="c1">#import string</span>
+<span class="kn">import</span> <span class="nn">community</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">reload</span> 
+<span class="n">reload</span><span class="p">(</span><span class="n">community</span><span class="p">)</span>
+
+
+<span class="kn">import</span> <span class="nn">gensim</span>
+<span class="kn">import</span> <span class="nn">gensim.corpora</span> <span class="k">as</span> <span class="nn">corpora</span>
+<span class="kn">from</span> <span class="nn">gensim.models</span> <span class="kn">import</span> <span class="n">CoherenceModel</span>
+<span class="kn">from</span> <span class="nn">gensim.test.utils</span> <span class="kn">import</span> <span class="n">common_corpus</span>
+<span class="kn">import</span> <span class="nn">pyLDAvis</span>
+<span class="kn">import</span> <span class="nn">pyLDAvis.gensim_models</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="c1">#from IPython.core.display import display, HTML</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span> <span class="k">as</span> <span class="n">md</span>
+
+<span class="kn">from</span> <span class="nn">vaderSentiment.vaderSentiment</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\miaha\anaconda3\lib\site-packages\gensim\similarities\__init__.py:15: UserWarning: The gensim.similarities.levenshtein submodule is disabled, because the optional Levenshtein package &lt;https://pypi.org/project/python-Levenshtein/&gt; is unavailable. Install Levenhstein (e.g. `pip install python-Levenshtein`) to suppress this warning.
+  warnings.warn(msg)
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span><span class="o">/</span><span class="n">ipykernel_18424</span><span class="o">/</span><span class="mf">2602508028.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span> <span class="k">as</span> <span class="n">md</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span> 
+<span class="ne">---&gt; </span><span class="mi">37</span> <span class="kn">from</span> <span class="nn">vaderSentiment.vaderSentiment</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;matplotlib&#39;</span><span class="p">,</span> <span class="s1">&#39;inline&#39;</span><span class="p">)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;vaderSentiment&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the character dataframe </span>
+<span class="n">characters_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/characters.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># Load the network </span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/SW_DG_GCC.gpickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+    <span class="n">SW_DG_GCC</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/SW_DG_GCC.gpickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+    <span class="n">SW_DG_GCC</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+
+<span class="c1"># Create to undirected graph for plot</span>
+<span class="n">G_SW_GCC</span> <span class="o">=</span> <span class="n">SW_DG_GCC</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
+
+<span class="c1"># Load the partition </span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/partition.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+    <span class="n">partition</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="word-clouds">
+<h1>Word clouds<a class="headerlink" href="#word-clouds" title="Permalink to this headline">¶</a></h1>
+<p>The word clouds help us extract meaning from large amounts of text by providing the most descriptive words in a document or corpus. We are extracting the most descriptive words based on two functions the Term Count (TC) and Inverse Document Frequency (IDF). TC function returns how many times a specific term (word) appears in a given document. IDF function returns a value related to how many document in a corpus a specific term (word) appears. Output of TC function can be described as how important a term is in a document. Output of IDF function can be described as how unique the term in the corpus is. By multiplying both outputs we aquire the most descriptive words for a document.</p>
+<div class="section" id="word-clouds-for-alliance-based-on-the-wiki">
+<h2>Word clouds for alliance based on the wiki<a class="headerlink" href="#word-clouds-for-alliance-based-on-the-wiki" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Remove the characters with no alliance</span>
+<span class="n">characters_dropna</span> <span class="o">=</span> <span class="n">characters_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corpus_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/data/characters/&#39;</span>
+<span class="n">file_list</span> <span class="o">=</span> <span class="n">characters_dropna</span><span class="p">[</span><span class="s1">&#39;File_Name&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span>
+<span class="n">corpus</span> <span class="o">=</span> <span class="n">pcr</span><span class="p">(</span><span class="n">corpus_root</span><span class="p">,</span> <span class="n">file_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">list_alliance</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">characters_dropna</span><span class="p">[</span><span class="s1">&#39;Alliance&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Create Corpus for alliance</span>
+<span class="n">corpus_root_alliance</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/data/Alliance/&#39;</span>
+<span class="n">file_list_alliance</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">list_alliance</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span>
+<span class="n">corpus_alliance</span> <span class="o">=</span> <span class="n">pcr</span><span class="p">(</span><span class="n">corpus_root_alliance</span><span class="p">,</span> <span class="n">file_list_alliance</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_wordclouds</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="c1">#The if statement filter the object between a corpus and a dictionary</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">tc_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">document</span><span class="p">:{</span><span class="n">term</span><span class="p">:</span><span class="n">term_count</span> <span class="k">for</span> <span class="n">term</span><span class="p">,</span><span class="n">term_count</span> <span class="ow">in</span> <span class="n">FreqDist</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">document</span><span class="p">])</span><span class="o">.</span><span class="n">most_common</span><span class="p">()}</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tc_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">document</span><span class="p">:{</span><span class="n">term</span><span class="p">:</span><span class="n">term_count</span> <span class="k">for</span> <span class="n">term</span><span class="p">,</span><span class="n">term_count</span> <span class="ow">in</span> <span class="n">FreqDist</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">document</span><span class="p">))</span><span class="o">.</span><span class="n">most_common</span><span class="p">()}</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">fileids</span><span class="p">()}</span>
+    
+    <span class="c1">#Dictionary with IDF values for each unique word</span>
+    <span class="n">idf_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="n">term</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]):</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tc_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="c1">#Total number of words inside document</span>
+        <span class="n">nt</span> <span class="o">=</span> <span class="mi">0</span> 
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">nt</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># nt describes in how many documents the term appears</span>
+        <span class="n">idf_dict</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">N</span><span class="o">/</span><span class="n">nt</span><span class="p">),</span><span class="mi">4</span><span class="p">)</span> <span class="c1">#Calculate Inverse Term Frequency</span>
+    
+    <span class="c1">#Dictionary with TC-IDF values for each word for each document</span>
+    <span class="n">tc_idf_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">document</span><span class="p">:{</span><span class="n">term</span><span class="p">:</span><span class="n">tc_dict</span><span class="p">[</span><span class="n">document</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">)</span><span class="o">*</span><span class="n">idf_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">)</span> <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="p">[</span><span class="n">document</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>\
+         <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+    
+    <span class="c1">#Dictionary with TC-IDF values of the top 200 words for each docoment</span>
+    <span class="n">most_common_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">document</span><span class="p">:{</span><span class="n">word</span><span class="p">:</span><span class="n">value</span> <span class="k">for</span> <span class="n">word</span><span class="p">,</span><span class="n">value</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tc_idf_dict</span><span class="p">[</span><span class="n">document</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>\
+         <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">200</span><span class="p">]}</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+    
+
+    <span class="c1">#Create wordclouds</span>
+    <span class="n">col_word</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="s1">&#39;BuGn&#39;</span><span class="p">,</span> <span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="s1">&#39;Greens&#39;</span><span class="p">]</span> <span class="c1">#Colormap</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/data/Stormtrooper.jpg&#39;</span><span class="p">))</span> <span class="c1">#Create shape image for wordclouds</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1">#Plotting the word cloud</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">24</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">most_common_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">wordcloud</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">collocations</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="n">col_word</span><span class="p">[</span><span class="n">a</span><span class="p">],</span>\
+             <span class="n">max_font_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">relative_scaling</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">max_words</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> 
+        <span class="n">width</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">)</span><span class="o">.</span><span class="n">generate_from_frequencies</span><span class="p">(</span><span class="n">most_common_dict</span><span class="p">[</span><span class="n">attribute</span><span class="p">])</span>
+        
+        <span class="n">a</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">wordcloud</span><span class="p">,</span><span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+        <span class="n">attribute_clean</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">attribute</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.txt&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">attribute_clean</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">wordcloud</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">create_wordclouds</span><span class="p">(</span><span class="n">corpus_alliance</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Page_NLP_10_0.png" src="_images/Page_NLP_10_0.png" />
+</div>
+</div>
+<p>As we observe from the evil alliance we can see names from evil characters such as General Hux which was the leader of the First Order. Surprisingly General Kenobi appears on the sith word cloud which is unusual because he is a Jedi, but he had a lot of interactions with Sith lords, thus his appearance on the wordcloud is justified. The word “Squadron” appearing in the “Good” word cloud, which is the fighting unit of TIE fighters. Finally for the Jedi wordcloud we can see the characters such as known Jedi <a class="reference external" href="https://starwars.fandom.com/wiki/Shaak_Ti">Shaak Ti</a> appearing in Jedi wordcloud and General Windu but surprisingly we can also see relative names to the Jedis such as <a class="reference external" href="https://starwars.fandom.com/wiki/Morgan_Elsbeth">Morgan Elsbeth</a> which we found her appearance in the Jedi wordcloud surprising after her duels with <a class="reference external" href="https://starwars.fandom.com/wiki/Ahsoka_Tano">Ashoka Tano</a> and <a class="reference external" href="https://starwars.fandom.com/wiki/Din_Djarin">Mandalorian</a> on the Star Wars Series “The Mandalorian”.</p>
+</div>
+<div class="section" id="word-clouds-for-5-main-characters-based-on-wiki">
+<h2>Word clouds for 5 main characters based on wiki<a class="headerlink" href="#word-clouds-for-5-main-characters-based-on-wiki" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">list_top_5</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;File_Name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">characters_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;Human&#39;</span> <span class="ow">in</span> <span class="n">characters_df</span><span class="p">[</span><span class="s1">&#39;Species&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d&#39;</span><span class="p">,</span><span class="n">characters_df</span><span class="p">[</span><span class="s1">&#39;Appearance&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]))</span> <span class="o">&gt;=</span> <span class="mi">7</span><span class="p">]</span>
+<span class="n">list_top_5</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Leia Skywalker Organa Solo&#39;,
+ &#39;Anakin Skywalker&#39;,
+ &#39;Luke Skywalker&#39;,
+ &#39;Darth Sidious&#39;,
+ &#39;Obi-Wan Kenobi&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>As we can observe above the most popular characters. From the light side Leia, Luke, and Obi-wan. From the dark side Darth Sidious, and Anakin Skywalker.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corpus_root_top_5</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/data/top_5/&#39;</span>
+<span class="n">file_list_top_5</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">list_top_5</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span>
+<span class="n">corpus_top_5</span> <span class="o">=</span> <span class="n">pcr</span><span class="p">(</span><span class="n">corpus_root_top_5</span><span class="p">,</span> <span class="n">file_list_top_5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">create_wordclouds</span><span class="p">(</span><span class="n">corpus_top_5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Page_NLP_16_0.png" src="_images/Page_NLP_16_0.png" />
+</div>
+</div>
+<p>The appearance of <a class="reference external" href="https://starwars.fandom.com/wiki/Poe_Dameron">Poe dameron</a> on Leia’s word cloud indicates their friendship on the Sequel Trilogy. In Luke’s wordcloud we can understand the importance of jedi ‘text’ mentioned by Luke and the word <a class="reference external" href="https://starwars.fandom.com/wiki/Grogu">Grogu (Baby Yoda)</a> that ‘Luke’ rescues and proceed to train in the Star Wars series “The Mandalorian”. Also the word ‘nephew’ that indicates Kylo Ren (his nephew) one of the main characters of the Sequel Trilogy. For Kenobi’s word cloud we can see he has a high connection with ‘Ashoka Tano’. That relationship is being explored on the Star Wars series ‘The Clone Wars’. And for Darth Sidious’ word cloud we can see a highly descriptive world of ‘Admiral Thrawn’ which is a really important character in the Star Wars universe. Lastly for Anakin we see ‘Commander Rex’ which was a clone and his colleague for a long time in many wars also we can see again ‘Ashoka Tano’, Anakin’s Padawan learner.</p>
+</div>
+<div class="section" id="part-3-6-hidden-topic-modeling">
+<h2>Part 3.6: Hidden topic modeling<a class="headerlink" href="#part-3-6-hidden-topic-modeling" title="Permalink to this headline">¶</a></h2>
+<p><a id='htm.'></a></p>
+<p>Here we’ll apply hidden topic modeling to two different corpuses and see how the topics are related to the documents.</p>
+<p>We’ll use the Latent Dirichlet Allocation (LDA) model which is an unsuperviced machine learning model, thus no previous labelling has to be made, and we only have to provide our corpus.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">freq</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">partition</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">bins</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">partition</span><span class="o">.</span><span class="n">values</span><span class="p">())),</span> <span class="n">rwidth</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">community_size</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">community_size</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">&#39;Community Size&#39;</span><span class="p">},</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">#renaming column</span>
+<span class="n">com_trilogy</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="n">partition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Anakin_Skywalker&#39;</span><span class="p">):</span> <span class="p">[</span><span class="n">community_size</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">partition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Anakin_Skywalker&#39;</span><span class="p">),</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;pre&#39;</span><span class="p">],</span> \
+    <span class="n">partition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Luke_Skywalker&#39;</span><span class="p">):</span> <span class="p">[</span><span class="n">community_size</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">partition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Luke_Skywalker&#39;</span><span class="p">),</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">],</span>\
+    <span class="n">partition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Rey_Skywalker&#39;</span><span class="p">):</span> <span class="p">[</span><span class="n">community_size</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">partition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Rey_Skywalker&#39;</span><span class="p">),</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;seq&#39;</span><span class="p">]},</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">)</span>
+<span class="n">com_trilogy</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">&#39;Community Size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="s1">&#39;Trilogy&#39;</span><span class="p">},</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">com_trilogy</span>
+
+<span class="n">com_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">com_trilogy</span><span class="p">[</span><span class="s1">&#39;Community Size&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="p">[[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">partition</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="n">com</span><span class="p">]</span> <span class="k">for</span> <span class="n">com</span> <span class="ow">in</span> <span class="n">com_trilogy</span><span class="p">[</span><span class="s1">&#39;Community Size&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Page_NLP_20_0.png" src="_images/Page_NLP_20_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corpus_root_com</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/data/Communities/&#39;</span>
+<span class="n">file_list_com</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">com_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
+<span class="n">corpus_com</span> <span class="o">=</span> <span class="n">pcr</span><span class="p">(</span><span class="n">corpus_root_com</span><span class="p">,</span> <span class="n">file_list_com</span><span class="p">)</span>
+<span class="n">com_top</span> <span class="o">=</span> <span class="p">[</span><span class="n">corpus_com</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">corpus_com</span><span class="o">.</span><span class="n">fileids</span><span class="p">()]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">id2word</span> <span class="o">=</span> <span class="n">corpora</span><span class="o">.</span><span class="n">Dictionary</span><span class="p">(</span><span class="n">com_top</span><span class="p">)</span>
+
+<span class="n">common_corpus</span> <span class="o">=</span> <span class="p">[</span><span class="n">id2word</span><span class="o">.</span><span class="n">doc2bow</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">com_top</span><span class="p">]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">gensim</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">LdaMulticore</span><span class="p">(</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">common_corpus</span><span class="p">,</span> <span class="n">id2word</span> <span class="o">=</span> <span class="n">id2word</span><span class="p">,</span> <span class="n">num_topics</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">CoherenceModel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="n">common_corpus</span><span class="p">,</span> <span class="n">coherence</span><span class="o">=</span><span class="s1">&#39;u_mass&#39;</span><span class="p">)</span>
+<span class="n">coherence</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_coherence</span><span class="p">()</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">show_topics</span><span class="p">(</span><span class="n">num_topics</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">num_words</span> <span class="o">=</span> <span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(0,
+  &#39;0.013*&quot;jedi&quot; + 0.007*&quot;first&quot; + 0.007*&quot;force&quot; + 0.007*&quot;order&quot; + 0.007*&quot;skywalker&quot; + 0.006*&quot;would&quot;&#39;),
+ (1,
+  &#39;0.009*&quot;jedi&quot; + 0.008*&quot;first&quot; + 0.007*&quot;skywalker&quot; + 0.006*&quot;force&quot; + 0.006*&quot;order&quot; + 0.005*&quot;would&quot;&#39;),
+ (2,
+  &#39;0.010*&quot;jedi&quot; + 0.007*&quot;force&quot; + 0.007*&quot;first&quot; + 0.007*&quot;skywalker&quot; + 0.005*&quot;order&quot; + 0.005*&quot;vader&quot;&#39;)]
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="sentiment-analysis">
+<h1>Sentiment analysis<a class="headerlink" href="#sentiment-analysis" title="Permalink to this headline">¶</a></h1>
+<p>We wish to look at sentiment for each of the characters both based on the wikipages and the scripts. The two methods we will use for sentiment analysis are LabMT and VADER. The LabMT is a dictionary-based approach, which means we will only be able to compute the sentiment for words in the LabMT dataset. This limits the LabMT’s ability to deal with connection words such as negation. The VADER method is a combination of a rule-based approach and a dictionary-based approach. The combination means VADER will modify the polarity of a word based on the surrounding words. Due to the rule-based approach the conjunction words, which were ignored in the LabMT method, will also be evaluated.</p>
+<p>VADER is created for social media features for punctuation, emojis and slang are added.</p>
+<p>We will save the characters and their corresponding wikipage inside a dictionary. To do this we will loop over all characters and extract the text from <a class="reference external" href="https://starwars.fandom.com/wiki/Main_Page">WOOKIEEPEDIA</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the names for loading URL</span>
+<span class="n">characters_df</span><span class="p">[</span><span class="s1">&#39;url_Name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">characters_df</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+<span class="n">all_txt</span> <span class="o">=</span> <span class="n">characters_df</span><span class="p">[</span><span class="s1">&#39;url_Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="c1"># Save find the characters with empty wiki pages </span>
+<span class="n">emp_char</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Initialzation for loading the URL </span>
+<span class="n">baseurl</span> <span class="o">=</span> <span class="s2">&quot;https://starwars.fandom.com/api.php?&quot;</span>
+<span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;action=query&quot;</span>
+<span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;prop=extracts&amp;exlimit=1&amp;explaintext&quot;</span>
+<span class="n">dataformat</span> <span class="o">=</span> <span class="s2">&quot;format=json&quot;</span>
+
+<span class="c1"># Loop over all character and extract the wiki page </span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_txt</span><span class="p">:</span>
+
+    <span class="c1"># Create empty dictrionary for the character name</span>
+    <span class="n">wiki</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    
+    <span class="c1"># Load the wikipages</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;titles=&quot;</span> <span class="o">+</span> <span class="n">name</span>
+    <span class="n">queryChar</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&amp;</span><span class="si">{}</span><span class="s2">&amp;</span><span class="si">{}</span><span class="s2">&amp;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">baseurl</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">dataformat</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">queryChar</span><span class="p">))</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="s1">&#39;%3A&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%3F</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;?&#39;</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="s1">&#39;%3D&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">)</span>
+    <span class="n">queryChar</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="s1">&#39;%26&#39;</span><span class="p">,</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Open and load the wikipage </span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">queryChar</span><span class="p">)</span> <span class="c1"># Load wiki</span>
+    <span class="n">wiki_char</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="c1"># Extract the text inside the wikipage </span>
+    <span class="n">page_id</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">wiki_char</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">text_temp</span> <span class="o">=</span> <span class="n">wiki_char</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">][</span><span class="n">page_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;extract&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># Finding the workcout of wikipage and adding it to the dictionary</span>
+    <span class="k">if</span> <span class="n">text_temp</span><span class="p">:</span>
+      <span class="n">lines</span> <span class="o">=</span> <span class="n">text_temp</span>
+      <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\w+&#39;</span><span class="p">)</span>
+      <span class="n">wiki</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span> 
+      <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No wiki page found for </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+      <span class="n">emp_char</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+      <span class="n">lines</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+      <span class="n">wiki</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Saving the wiki pages inside the dictionary</span>
+    <span class="n">wiki</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;wiki&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lines</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No wiki page found for CT-55_11-9009
+No wiki page found for Canid
+No wiki page found for Pamich_Nerro_Goode
+No wiki page found for CT-0000_1010
+No wiki page found for LEP_servant_droid
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define function for compute LabMT sentiment for a text</span>
+<span class="k">def</span> <span class="nf">compute_avg_sentiment_LabMT</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="c1"># Join all sentences to one string</span>
+
+    <span class="c1"># Clean text </span>
+    <span class="n">words_final</span> <span class="o">=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    
+    <span class="c1"># Initialization to store values</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Using freqDist to only loop over unique words </span>
+    <span class="n">fdist</span> <span class="o">=</span> <span class="n">FreqDist</span><span class="p">(</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words_final</span><span class="p">)</span>
+    <span class="n">word_unique</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">fdist</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+    <span class="n">word_fre</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fdist</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+
+    <span class="c1"># Loop over words </span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fdist</span><span class="p">)):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">word_unique</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">word_fre</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="c1"># Get the LabMT score</span>
+        <span class="n">S_v</span> <span class="o">=</span> <span class="n">LabMT_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Weight the socre by the frequency</span>
+        <span class="k">if</span> <span class="n">S_v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="n">f</span> <span class="o">*</span> <span class="n">LabMT_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="n">f</span>
+            
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">/</span><span class="n">n</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define function for compute sentiment for a text</span>
+<span class="k">def</span> <span class="nf">compute_avg_sentiment_VADER</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    
+    <span class="c1"># Convert the text file to the right format, where each line is a  new element</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Initialzation </span>
+    <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">len_VADER</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Compute polarity for each sentence in text </span>
+    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sentence</span><span class="p">:</span>
+            <span class="n">vs</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">polarity_scores</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="n">vs</span><span class="p">[</span><span class="s1">&#39;compound&#39;</span><span class="p">]</span>
+            <span class="n">len_VADER</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+    <span class="c1"># Retur the average polarity</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">/</span><span class="n">len_VADER</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Loop through all </span>
+<span class="n">dict_LabMT</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">dict_VADER</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">wiki</span><span class="p">:</span>
+    <span class="n">LabMT_v</span> <span class="o">=</span> <span class="n">compute_avg_sentiment_LabMT</span><span class="p">(</span><span class="n">wiki</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;wiki&#39;</span><span class="p">])</span>
+    <span class="n">VADER_v</span> <span class="o">=</span> <span class="n">compute_avg_sentiment_VADER</span><span class="p">(</span><span class="n">wiki</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;wiki&#39;</span><span class="p">])</span>
+    <span class="n">dict_LabMT</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabMT_v</span>
+    <span class="n">dict_VADER</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">VADER_v</span>
+    <span class="n">wiki</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;LabMT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabMT_v</span>
+    <span class="n">wiki</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;VADER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">VADER_v</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">dict_LabMT</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">rwidth</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Histogram for all associated sentiments using LabMT&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sentiment score&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">9</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">dict_VADER</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">rwidth</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkred&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Histogram for all associated sentiments using VADER&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sentiment score&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Page_NLP_30_0.png" src="_images/Page_NLP_30_0.png" />
+</div>
+</div>
+<p>The plot above shows the distribution of sentiment for all characters using the two different methods. It is importent to note, that the scale and mean are defined differently for the two methods.</p>
+<p>On the left-hand side, we see the results from LabMT. The average for this method is 5 and we can see that the majority of the of the characters are slightly above average. But the values are close to 5 which means they will still be categorized as neutral. On the right-hand side, we have the distribution created by the VADER method. Here we see that the mean is zero and the vast majority are below 0. Furthermore, we see that some will be classified as negative since they have a score lower than -0.5.</p>
+<p>As we can see the two methods results in very different results. This is due to the different approach these two methods use. The VADER uses a combination of the rule-based and dictionary-based approach which means more aspects are picked up from text files, such as negation and conjunctions. Furthermore, we see that the VADER shows, that there are characters who will be categorized as negative. A reason for the sentiment analysis score being low, could be because the Star Wars movies are talking about war with a lot of weapons and describing evil and good. Since most of the words related to war are categorized as negative this explains why the sentiment is tilted towards negative.</p>
+<p>The VADER method categorized some character not as neutral, we will take a closer look at these characters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sort the dictionary based on VADER score </span>
+<span class="n">sorted_VADER</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">dict_VADER</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="c1"># Print the top 5 most negative characters </span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">sorted_VADER</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2"> has VADER sentiment vlues of </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">sorted_VADER</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="n">i</span><span class="p">],</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Grievous has VADER sentiment vlues of -0.6
+Mot-Not_Rab has VADER sentiment vlues of -0.56
+Edcel_Bar_Gane has VADER sentiment vlues of -0.55
+Po_Nudo has VADER sentiment vlues of -0.53
+IG-101 has VADER sentiment vlues of -0.53
+</pre></div>
+</div>
+</div>
+</div>
+<p>The top 5 most negative characters from the VADER methods are all categorized as having a negative sentiment. The most negative character is Grievous who was a warlord. He has a detailed wikipage describing through all the things he has done, which are all war related. For the rest of the top 5 most negative characters, by inspecting their corresponding wikipage we see that the wikipages are short. This could result in the sentiment being lower, since all Star Wars character most likely have war related words, thus when the wiki page is short these will weigh more.</p>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="Page_Network.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">The Star Wars network</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="Page_Script.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Word clouds</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Orfeas, Harald, Mia<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

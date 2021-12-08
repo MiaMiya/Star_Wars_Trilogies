@@ -4,5 +4,11 @@
 format: jb-book
 root: intro
 chapters:
-- file: markdown
-- file: notebooks
+- file: Page_Data_vis.ipynb
+- file: Page_Network.ipynb
+- file: Page_NLP.ipynb
+- file: Page_Script.ipynb
+
+
+
+
