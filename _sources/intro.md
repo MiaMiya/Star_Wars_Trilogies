@@ -10,4 +10,4 @@ Our goal was to extract useful information regarding the Star Wars characters an
 
 **The dataset can be downloaded via [this link](https://github.com/MiaMiya/Star_Wars_Trilogies/tree/main/SW_Book/data).**
 
-**The explainer notebook can be accessed via [this link](https://nbviewer.jupyter.org/https://github.com/MiaMiya/Star_Wars_Trilogies/blob/main/project_Final_run.ipynb).**
+**The explainer notebook can be accessed via [this link](https://nbviewer.org/github/MiaMiya/Star_Wars_Trilogies/blob/main/project_Final_run.ipynb).**
