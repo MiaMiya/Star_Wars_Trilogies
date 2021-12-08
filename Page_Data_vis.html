@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to your Jupyter Book &#8212; My sample book</title>
+    <title>The Star Wars data &#8212; My sample book</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -51,7 +51,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Markdown Files" href="markdown.html" />
+    <link rel="prev" title="Content with notebooks" href="notebooks.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -89,13 +89,13 @@
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
         <ul class="nav bd-sidenav">
- <li class="toctree-l1 current">
-  <a class="reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
    Welcome to your Jupyter Book
   </a>
  </li>
 </ul>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="markdown.html">
    Markdown Files
@@ -106,8 +106,8 @@
    Content with notebooks
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Page_Data_vis.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    The Star Wars data
   </a>
  </li>
@@ -152,9 +152,9 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/intro.md"><button type="button"
+        <a class="dropdown-buttons" href="_sources/Page_Data_vis.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
+                data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
             onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -172,7 +172,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FPage_Data_vis.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -188,6 +188,23 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/Page_Data_vis.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
@@ -201,20 +218,112 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="welcome-to-your-jupyter-book">
-<h1>Welcome to your Jupyter Book<a class="headerlink" href="#welcome-to-your-jupyter-book" title="Permalink to this headline">¶</a></h1>
-<p>This is a small sample book to give you a feel for how book content is
-structured.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Here is a note!</p>
-</div>
-<p>And here is a code block:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">e</span> <span class="o">=</span> <span class="n">mc</span><span class="o">^</span><span class="mi">2</span>
+  <div class="tex2jax_ignore mathjax_ignore section" id="the-star-wars-data">
+<h1>The Star Wars data<a class="headerlink" href="#the-star-wars-data" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Check out the content pages bundled with this sample book to see more.</p>
-<div class="toctree-wrapper compound">
+</div>
+</div>
+<p>The data used for the analysis is a dataframe containing all the characters in the chosen Star Wars movies, meaning all movies in the Skywalker saga, Star Wars 1-9. The dataframe is created such that we will get an easy overview for all characters and their associated attributes. The information of characters will come from the <a class="reference external" href="https://starwars.fandom.com/wiki/Main_Page">Star Wars fandom wiki</a>. There exists a unique wikipage for each movie, where all characters appearing in the movie will be listed. An example being:<br />
+<img src=data/wiki_appearances.PNG alt="wiki_appearances" width="500"/><br />
+The characters in our dataframe will be from <em>Characters</em> and <em>Creatures</em> in the webpages. Furthermore, we will only extract the characters categorized as cannon, which means we will ignore legend characters.
+We have chosen to add <em>homeworld, species, gender, affiliation</em> and <em>alliance</em>.
+We have in total 1397 unique characters.
+Here we an example of the dataframe.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Appearance</th>
+      <th>Homeworld</th>
+      <th>Species</th>
+      <th>Gender</th>
+      <th>Affiliation</th>
+      <th>Alliance</th>
+      <th>File_Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>7</th>
+      <td>Yané</td>
+      <td>[1]</td>
+      <td>['Naboo']</td>
+      <td>['Human (Naboo)']</td>
+      <td>['Female']</td>
+      <td>['Royal House of Naboo', 'Naboo Royal Handmaid...</td>
+      <td>Good</td>
+      <td>Yané</td>
+    </tr>
+    <tr>
+      <th>195</th>
+      <td>Anakin Skywalker</td>
+      <td>[1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
+      <td>['Tatooine']</td>
+      <td>['Human']</td>
+      <td>['Male']</td>
+      <td>['Skywalker family', 'Jedi Order', 'Jedi High ...</td>
+      <td>Mix</td>
+      <td>Anakin Skywalker</td>
+    </tr>
+    <tr>
+      <th>648</th>
+      <td>Unidentified female First Order officer</td>
+      <td>[7]</td>
+      <td>[]</td>
+      <td>['Human']</td>
+      <td>['Female']</td>
+      <td>['First Order', 'First Order military']</td>
+      <td>Evil</td>
+      <td>Unidentified female First Order officer</td>
+    </tr>
+    <tr>
+      <th>948</th>
+      <td>R2-D2</td>
+      <td>[1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
+      <td>['Naboo']</td>
+      <td>['Droid']</td>
+      <td>['Masculine programming']</td>
+      <td>['Royal House of Naboo', 'Jedi Order', 'Galact...</td>
+      <td>Good</td>
+      <td>R2-D2</td>
+    </tr>
+    <tr>
+      <th>1285</th>
+      <td>Finn</td>
+      <td>[7, 8, 9]</td>
+      <td>[]</td>
+      <td>['Human']</td>
+      <td>['Male']</td>
+      <td>['First Order', 'Batch Eight', 'FN Corps', 'Re...</td>
+      <td>Mix</td>
+      <td>Finn</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </div>
 
@@ -242,13 +351,13 @@ structured.</p>
               
         
             <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='right-next' id="next-link" href="markdown.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Markdown Files</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="notebooks.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Content with notebooks</p>
+        </div>
     </a>
 </div>
         
