@@ -1,0 +1,85 @@
+Traceback (most recent call last):
+  File "C:\Users\miaha\anaconda3\lib\site-packages\jupyter_cache\executors\utils.py", line 51, in single_nb_execution
+    executenb(
+  File "C:\Users\miaha\anaconda3\lib\site-packages\nbclient\client.py", line 1112, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "C:\Users\miaha\anaconda3\lib\site-packages\nbclient\util.py", line 74, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "C:\Users\miaha\anaconda3\lib\site-packages\nbclient\util.py", line 53, in just_run
+    return loop.run_until_complete(coro)
+  File "C:\Users\miaha\anaconda3\lib\asyncio\base_events.py", line 616, in run_until_complete
+    return future.result()
+  File "C:\Users\miaha\anaconda3\lib\site-packages\nbclient\client.py", line 553, in async_execute
+    await self.async_execute_cell(
+  File "C:\Users\miaha\anaconda3\lib\site-packages\nbclient\client.py", line 857, in async_execute_cell
+    self._check_raise_for_error(cell, exec_reply)
+  File "C:\Users\miaha\anaconda3\lib\site-packages\nbclient\client.py", line 760, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+for com in com_dict.keys():
+    plus = pd.Series(com_dict[com]) + '.txt'
+    text = nltk.Text(corpus.words(plus))
+
+    temp_text = [w for w in text]
+    temp_string = ' '.join(temp_text)
+    
+    file_path = corpus_root_com + str(com) + '.txt'
+    with open(file_path, 'w', encoding = 'utf-8') as f:
+        f.write(temp_string)
+------------------
+
+[1;31m---------------------------------------------------------------------------[0m
+[1;31mOSError[0m                                   Traceback (most recent call last)
+[1;32m~\AppData\Local\Temp/ipykernel_13668/623084978.py[0m in [0;36m<module>[1;34m[0m
+[0;32m      1[0m [1;32mfor[0m [0mcom[0m [1;32min[0m [0mcom_dict[0m[1;33m.[0m[0mkeys[0m[1;33m([0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m      2[0m     [0mplus[0m [1;33m=[0m [0mpd[0m[1;33m.[0m[0mSeries[0m[1;33m([0m[0mcom_dict[0m[1;33m[[0m[0mcom[0m[1;33m][0m[1;33m)[0m [1;33m+[0m [1;34m'.txt'[0m[1;33m[0m[1;33m[0m[0m
+[1;32m----> 3[1;33m     [0mtext[0m [1;33m=[0m [0mnltk[0m[1;33m.[0m[0mText[0m[1;33m([0m[0mcorpus[0m[1;33m.[0m[0mwords[0m[1;33m([0m[0mplus[0m[1;33m)[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m      4[0m [1;33m[0m[0m
+[0;32m      5[0m     [0mtemp_text[0m [1;33m=[0m [1;33m[[0m[0mw[0m [1;32mfor[0m [0mw[0m [1;32min[0m [0mtext[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3\lib\site-packages\nltk\corpus\reader\plaintext.py[0m in [0;36mwords[1;34m(self, fileids)[0m
+[0;32m     74[0m             [
+[0;32m     75[0m                 [0mself[0m[1;33m.[0m[0mCorpusView[0m[1;33m([0m[0mpath[0m[1;33m,[0m [0mself[0m[1;33m.[0m[0m_read_word_block[0m[1;33m,[0m [0mencoding[0m[1;33m=[0m[0menc[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[1;32m---> 76[1;33m                 [1;32mfor[0m [1;33m([0m[0mpath[0m[1;33m,[0m [0menc[0m[1;33m,[0m [0mfileid[0m[1;33m)[0m [1;32min[0m [0mself[0m[1;33m.[0m[0mabspaths[0m[1;33m([0m[0mfileids[0m[1;33m,[0m [1;32mTrue[0m[1;33m,[0m [1;32mTrue[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m     77[0m             ]
+[0;32m     78[0m         )
+
+[1;32m~\anaconda3\lib\site-packages\nltk\corpus\reader\api.py[0m in [0;36mabspaths[1;34m(self, fileids, include_encoding, include_fileid)[0m
+[0;32m    192[0m             [0mfileids[0m [1;33m=[0m [1;33m[[0m[0mfileids[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
+[0;32m    193[0m [1;33m[0m[0m
+[1;32m--> 194[1;33m         [0mpaths[0m [1;33m=[0m [1;33m[[0m[0mself[0m[1;33m.[0m[0m_root[0m[1;33m.[0m[0mjoin[0m[1;33m([0m[0mf[0m[1;33m)[0m [1;32mfor[0m [0mf[0m [1;32min[0m [0mfileids[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    195[0m [1;33m[0m[0m
+[0;32m    196[0m         [1;32mif[0m [0minclude_encoding[0m [1;32mand[0m [0minclude_fileid[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3\lib\site-packages\nltk\corpus\reader\api.py[0m in [0;36m<listcomp>[1;34m(.0)[0m
+[0;32m    192[0m             [0mfileids[0m [1;33m=[0m [1;33m[[0m[0mfileids[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
+[0;32m    193[0m [1;33m[0m[0m
+[1;32m--> 194[1;33m         [0mpaths[0m [1;33m=[0m [1;33m[[0m[0mself[0m[1;33m.[0m[0m_root[0m[1;33m.[0m[0mjoin[0m[1;33m([0m[0mf[0m[1;33m)[0m [1;32mfor[0m [0mf[0m [1;32min[0m [0mfileids[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    195[0m [1;33m[0m[0m
+[0;32m    196[0m         [1;32mif[0m [0minclude_encoding[0m [1;32mand[0m [0minclude_fileid[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3\lib\site-packages\nltk\data.py[0m in [0;36mjoin[1;34m(self, fileid)[0m
+[0;32m    332[0m     [1;32mdef[0m [0mjoin[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mfileid[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    333[0m         [0m_path[0m [1;33m=[0m [0mos[0m[1;33m.[0m[0mpath[0m[1;33m.[0m[0mjoin[0m[1;33m([0m[0mself[0m[1;33m.[0m[0m_path[0m[1;33m,[0m [0mfileid[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[1;32m--> 334[1;33m         [1;32mreturn[0m [0mFileSystemPathPointer[0m[1;33m([0m[0m_path[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    335[0m [1;33m[0m[0m
+[0;32m    336[0m     [1;32mdef[0m [0m__repr__[0m[1;33m([0m[0mself[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3\lib\site-packages\nltk\compat.py[0m in [0;36m_decorator[1;34m(*args, **kwargs)[0m
+[0;32m     39[0m     [1;32mdef[0m [0m_decorator[0m[1;33m([0m[1;33m*[0m[0margs[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m     40[0m         [0margs[0m [1;33m=[0m [1;33m([0m[0margs[0m[1;33m[[0m[1;36m0[0m[1;33m][0m[1;33m,[0m [0madd_py3_data[0m[1;33m([0m[0margs[0m[1;33m[[0m[1;36m1[0m[1;33m][0m[1;33m)[0m[1;33m)[0m [1;33m+[0m [0margs[0m[1;33m[[0m[1;36m2[0m[1;33m:[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
+[1;32m---> 41[1;33m         [1;32mreturn[0m [0minit_func[0m[1;33m([0m[1;33m*[0m[0margs[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m     42[0m [1;33m[0m[0m
+[0;32m     43[0m     [1;32mreturn[0m [0mwraps[0m[1;33m([0m[0minit_func[0m[1;33m)[0m[1;33m([0m[0m_decorator[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3\lib\site-packages\nltk\data.py[0m in [0;36m__init__[1;34m(self, _path)[0m
+[0;32m    310[0m         [0m_path[0m [1;33m=[0m [0mos[0m[1;33m.[0m[0mpath[0m[1;33m.[0m[0mabspath[0m[1;33m([0m[0m_path[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    311[0m         [1;32mif[0m [1;32mnot[0m [0mos[0m[1;33m.[0m[0mpath[0m[1;33m.[0m[0mexists[0m[1;33m([0m[0m_path[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[1;32m--> 312[1;33m             [1;32mraise[0m [0mOSError[0m[1;33m([0m[1;34m"No such file or directory: %r"[0m [1;33m%[0m [0m_path[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    313[0m         [0mself[0m[1;33m.[0m[0m_path[0m [1;33m=[0m [0m_path[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    314[0m [1;33m[0m[0m
+
+[1;31mOSError[0m: No such file or directory: 'C:\\Users\\miaha\\OneDrive\\Skrivebord\\SW_Trilogy\\Star_Wars_Trilogies\\SW_Book\\data\\characters\\Yané.txt'
+OSError: No such file or directory: 'C:\\Users\\miaha\\OneDrive\\Skrivebord\\SW_Trilogy\\Star_Wars_Trilogies\\SW_Book\\data\\characters\\Yané.txt'
+
