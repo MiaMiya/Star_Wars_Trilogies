@@ -363,29 +363,24 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\miaha\anaconda3\lib\site-packages\gensim\similarities\__init__.py:15: UserWarning: The gensim.similarities.levenshtein submodule is disabled, because the optional Levenshtein package &lt;https://pypi.org/project/python-Levenshtein/&gt; is unavailable. Install Levenhstein (e.g. `pip install python-Levenshtein`) to suppress this warning.
-  warnings.warn(msg)
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span><span class="o">/</span><span class="n">ipykernel_4004</span><span class="o">/</span><span class="mf">698552638.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">59</span> 
-<span class="g g-Whitespace">     </span><span class="mi">60</span> 
-<span class="ne">---&gt; </span><span class="mi">61</span> <span class="kn">from</span> <span class="nn">vaderSentiment.vaderSentiment</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
-<span class="g g-Whitespace">     </span><span class="mi">62</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;matplotlib&#39;</span><span class="p">,</span> <span class="s1">&#39;inline&#39;</span><span class="p">)</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;vaderSentiment&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corpus_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/data/characters/&#39;</span>
 <span class="n">file_list</span> <span class="o">=</span> <span class="n">characters_dropna</span><span class="p">[</span><span class="s1">&#39;File_Name&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span>
 <span class="n">corpus</span> <span class="o">=</span> <span class="n">pcr</span><span class="p">(</span><span class="n">corpus_root</span><span class="p">,</span> <span class="n">file_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span><span class="o">/</span><span class="n">ipykernel_13412</span><span class="o">/</span><span class="mf">1500867459.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">corpus_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/data/characters/&#39;</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">file_list</span> <span class="o">=</span> <span class="n">characters_dropna</span><span class="p">[</span><span class="s1">&#39;File_Name&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">corpus</span> <span class="o">=</span> <span class="n">pcr</span><span class="p">(</span><span class="n">corpus_root</span><span class="p">,</span> <span class="n">file_list</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;characters_dropna&#39; is not defined
 </pre></div>
 </div>
 </div>

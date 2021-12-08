@@ -17,54 +17,56 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import figure
-import pickle
-import os
-from nltk import FreqDist
-import seaborn as sns
-from PIL import Image
-
-#from scipy.interpolate import interp1d
-#from pathlib import Path
-from wordcloud import WordCloud
-from nltk.corpus import PlaintextCorpusReader as pcr
-#from nltk.corpus import PlaintextCorpusReader
-#from nltk.tokenize import WordPunctTokenizer
-#import string
-import community
-from importlib import reload 
-reload(community)
-
-
-import gensim
-import gensim.corpora as corpora
-from gensim.models import CoherenceModel
-from gensim.test.utils import common_corpus
-import pyLDAvis
-import pyLDAvis.gensim_models
-import warnings
-
-
-import re
-#from IPython.core.display import display, HTML
-import requests
-from IPython.display import Markdown as md
-
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-%matplotlib inline 
+create_wordclouds(corpus_alliance)
 ------------------
 
 [1;31m---------------------------------------------------------------------------[0m
-[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)
-[1;32m~\AppData\Local\Temp/ipykernel_18424/2602508028.py[0m in [0;36m<module>[1;34m[0m
-[0;32m     35[0m [1;32mfrom[0m [0mIPython[0m[1;33m.[0m[0mdisplay[0m [1;32mimport[0m [0mMarkdown[0m [1;32mas[0m [0mmd[0m[1;33m[0m[1;33m[0m[0m
-[0;32m     36[0m [1;33m[0m[0m
-[1;32m---> 37[1;33m [1;32mfrom[0m [0mvaderSentiment[0m[1;33m.[0m[0mvaderSentiment[0m [1;32mimport[0m [0mSentimentIntensityAnalyzer[0m[1;33m[0m[1;33m[0m[0m
-[0m[0;32m     38[0m [0mget_ipython[0m[1;33m([0m[1;33m)[0m[1;33m.[0m[0mrun_line_magic[0m[1;33m([0m[1;34m'matplotlib'[0m[1;33m,[0m [1;34m'inline'[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[1;31mImportError[0m                               Traceback (most recent call last)
+[1;32m~\AppData\Local\Temp/ipykernel_5648/988757351.py[0m in [0;36m<module>[1;34m[0m
+[1;32m----> 1[1;33m [0mcreate_wordclouds[0m[1;33m([0m[0mcorpus_alliance[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m
+[1;32m~\AppData\Local\Temp/ipykernel_5648/2765383741.py[0m in [0;36mcreate_wordclouds[1;34m(data)[0m
+[0;32m     34[0m     [1;32mfor[0m [0mattribute[0m [1;32min[0m [0mmost_common_dict[0m[1;33m.[0m[0mkeys[0m[1;33m([0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m     35[0m         [0mplt[0m[1;33m.[0m[0msubplot[0m[1;33m([0m[1;36m3[0m[1;33m,[0m [1;36m2[0m[1;33m,[0m [0ma[0m[1;33m+[0m[1;36m1[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[1;32m---> 36[1;33m         wordcloud = WordCloud(mask=mask, collocations = False, background_color="white", colormap=col_word[a],\
+[0m[0;32m     37[0m              [0mmax_font_size[0m[1;33m=[0m[1;36m1024[0m[1;33m,[0m [0mrelative_scaling[0m [1;33m=[0m [1;36m0.6[0m[1;33m,[0m [0mmax_words[0m [1;33m=[0m [1;36m200[0m[1;33m,[0m[1;33m[0m[1;33m[0m[0m
+[0;32m     38[0m         width = 3000, height = 3000).generate_from_frequencies(most_common_dict[attribute])
 
-[1;31mModuleNotFoundError[0m: No module named 'vaderSentiment'
-ModuleNotFoundError: No module named 'vaderSentiment'
+[1;32m~\anaconda3\lib\site-packages\wordcloud\wordcloud.py[0m in [0;36mgenerate_from_frequencies[1;34m(self, frequencies, max_font_size)[0m
+[0;32m    494[0m             [1;32mwhile[0m [1;32mTrue[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    495[0m                 [1;31m# try to find a position[0m[1;33m[0m[1;33m[0m[1;33m[0m[0m
+[1;32m--> 496[1;33m                 [0mfont[0m [1;33m=[0m [0mImageFont[0m[1;33m.[0m[0mtruetype[0m[1;33m([0m[0mself[0m[1;33m.[0m[0mfont_path[0m[1;33m,[0m [0mfont_size[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    497[0m                 [1;31m# transpose font optionally[0m[1;33m[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    498[0m                 transposed_font = ImageFont.TransposedFont(
+
+[1;32m~\anaconda3\lib\site-packages\PIL\ImageFont.py[0m in [0;36mtruetype[1;34m(font, size, index, encoding, layout_engine)[0m
+[0;32m    853[0m [1;33m[0m[0m
+[0;32m    854[0m     [1;32mtry[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[1;32m--> 855[1;33m         [1;32mreturn[0m [0mfreetype[0m[1;33m([0m[0mfont[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    856[0m     [1;32mexcept[0m [0mOSError[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    857[0m         [1;32mif[0m [1;32mnot[0m [0misPath[0m[1;33m([0m[0mfont[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3\lib\site-packages\PIL\ImageFont.py[0m in [0;36mfreetype[1;34m(font)[0m
+[0;32m    850[0m [1;33m[0m[0m
+[0;32m    851[0m     [1;32mdef[0m [0mfreetype[0m[1;33m([0m[0mfont[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[1;32m--> 852[1;33m         [1;32mreturn[0m [0mFreeTypeFont[0m[1;33m([0m[0mfont[0m[1;33m,[0m [0msize[0m[1;33m,[0m [0mindex[0m[1;33m,[0m [0mencoding[0m[1;33m,[0m [0mlayout_engine[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    853[0m [1;33m[0m[0m
+[0;32m    854[0m     [1;32mtry[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3\lib\site-packages\PIL\ImageFont.py[0m in [0;36m__init__[1;34m(self, font, size, index, encoding, layout_engine)[0m
+[0;32m    185[0m         [1;32mif[0m [0mlayout_engine[0m [1;32mnot[0m [1;32min[0m [1;33m([0m[0mLAYOUT_BASIC[0m[1;33m,[0m [0mLAYOUT_RAQM[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    186[0m             [0mlayout_engine[0m [1;33m=[0m [0mLAYOUT_BASIC[0m[1;33m[0m[1;33m[0m[0m
+[1;32m--> 187[1;33m             [1;32mif[0m [0mcore[0m[1;33m.[0m[0mHAVE_RAQM[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    188[0m                 [0mlayout_engine[0m [1;33m=[0m [0mLAYOUT_RAQM[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    189[0m         [1;32melif[0m [0mlayout_engine[0m [1;33m==[0m [0mLAYOUT_RAQM[0m [1;32mand[0m [1;32mnot[0m [0mcore[0m[1;33m.[0m[0mHAVE_RAQM[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3\lib\site-packages\PIL\ImageFont.py[0m in [0;36m__getattr__[1;34m(self, id)[0m
+[0;32m     42[0m     [1;31m# module placeholder[0m[1;33m[0m[1;33m[0m[1;33m[0m[0m
+[0;32m     43[0m     [1;32mdef[0m [0m__getattr__[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mid[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[1;32m---> 44[1;33m         [1;32mraise[0m [0mImportError[0m[1;33m([0m[1;34m"The _imagingft C module is not installed"[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m     45[0m [1;33m[0m[0m
+[0;32m     46[0m [1;33m[0m[0m
+
+[1;31mImportError[0m: The _imagingft C module is not installed
+ImportError: The _imagingft C module is not installed
 
