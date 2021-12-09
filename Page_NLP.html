@@ -279,60 +279,8 @@
 <div class="cell tag_remove-input docutils container">
 </div>
 <div class="cell tag_remove-input docutils container">
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
-<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span><span class="o">/</span><span class="n">ipykernel_7968</span><span class="o">/</span><span class="mf">988757351.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">create_wordclouds</span><span class="p">(</span><span class="n">corpus_alliance</span><span class="p">)</span>
-
-<span class="nn">~\AppData\Local\Temp/ipykernel_7968/2765383741.py</span> in <span class="ni">create_wordclouds</span><span class="nt">(data)</span>
-<span class="g g-Whitespace">     </span><span class="mi">34</span>     <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">most_common_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-<span class="g g-Whitespace">     </span><span class="mi">35</span>         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">36</span>         <span class="n">wordcloud</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">collocations</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="n">col_word</span><span class="p">[</span><span class="n">a</span><span class="p">],</span>\
-<span class="g g-Whitespace">     </span><span class="mi">37</span>              <span class="n">max_font_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">relative_scaling</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">max_words</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">38</span>         <span class="n">width</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">)</span><span class="o">.</span><span class="n">generate_from_frequencies</span><span class="p">(</span><span class="n">most_common_dict</span><span class="p">[</span><span class="n">attribute</span><span class="p">])</span>
-
-<span class="nn">~\anaconda3\lib\site-packages\wordcloud\wordcloud.py</span> in <span class="ni">generate_from_frequencies</span><span class="nt">(self, frequencies, max_font_size)</span>
-<span class="g g-Whitespace">    </span><span class="mi">494</span>             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">495</span>                 <span class="c1"># try to find a position</span>
-<span class="ne">--&gt; </span><span class="mi">496</span>                 <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">font_path</span><span class="p">,</span> <span class="n">font_size</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">497</span>                 <span class="c1"># transpose font optionally</span>
-<span class="g g-Whitespace">    </span><span class="mi">498</span>                 <span class="n">transposed_font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">TransposedFont</span><span class="p">(</span>
-
-<span class="nn">~\anaconda3\lib\site-packages\PIL\ImageFont.py</span> in <span class="ni">truetype</span><span class="nt">(font, size, index, encoding, layout_engine)</span>
-<span class="g g-Whitespace">    </span><span class="mi">853</span> 
-<span class="g g-Whitespace">    </span><span class="mi">854</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">855</span>         <span class="k">return</span> <span class="n">freetype</span><span class="p">(</span><span class="n">font</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">856</span>     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">857</span>         <span class="k">if</span> <span class="ow">not</span> <span class="n">isPath</span><span class="p">(</span><span class="n">font</span><span class="p">):</span>
-
-<span class="nn">~\anaconda3\lib\site-packages\PIL\ImageFont.py</span> in <span class="ni">freetype</span><span class="nt">(font)</span>
-<span class="g g-Whitespace">    </span><span class="mi">850</span> 
-<span class="g g-Whitespace">    </span><span class="mi">851</span>     <span class="k">def</span> <span class="nf">freetype</span><span class="p">(</span><span class="n">font</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">852</span>         <span class="k">return</span> <span class="n">FreeTypeFont</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">encoding</span><span class="p">,</span> <span class="n">layout_engine</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">853</span> 
-<span class="g g-Whitespace">    </span><span class="mi">854</span>     <span class="k">try</span><span class="p">:</span>
-
-<span class="nn">~\anaconda3\lib\site-packages\PIL\ImageFont.py</span> in <span class="ni">__init__</span><span class="nt">(self, font, size, index, encoding, layout_engine)</span>
-<span class="g g-Whitespace">    </span><span class="mi">185</span>         <span class="k">if</span> <span class="n">layout_engine</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">LAYOUT_BASIC</span><span class="p">,</span> <span class="n">LAYOUT_RAQM</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">186</span>             <span class="n">layout_engine</span> <span class="o">=</span> <span class="n">LAYOUT_BASIC</span>
-<span class="ne">--&gt; </span><span class="mi">187</span>             <span class="k">if</span> <span class="n">core</span><span class="o">.</span><span class="n">HAVE_RAQM</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">188</span>                 <span class="n">layout_engine</span> <span class="o">=</span> <span class="n">LAYOUT_RAQM</span>
-<span class="g g-Whitespace">    </span><span class="mi">189</span>         <span class="k">elif</span> <span class="n">layout_engine</span> <span class="o">==</span> <span class="n">LAYOUT_RAQM</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">HAVE_RAQM</span><span class="p">:</span>
-
-<span class="nn">~\anaconda3\lib\site-packages\PIL\ImageFont.py</span> in <span class="ni">__getattr__</span><span class="nt">(self, id)</span>
-<span class="g g-Whitespace">     </span><span class="mi">42</span>     <span class="c1"># module placeholder</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span>     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">44</span>         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;The _imagingft C module is not installed&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">45</span> 
-<span class="g g-Whitespace">     </span><span class="mi">46</span> 
-
-<span class="ne">ImportError</span>: The _imagingft C module is not installed
-</pre></div>
 </div>
-<img alt="_images/Page_NLP_10_1.png" src="_images/Page_NLP_10_1.png" />
-</div>
-</div>
+<p><img alt="alliance" src="_images/alliance_wc.PNG" /></p>
 <p>As we observe from the evil alliance we can see names from evil characters such as General Hux which was the leader of the First Order.</p>
 <p>Surprisingly General Kenobi appears on the sith word cloud which is unusual because he is a Jedi, but he had a lot of interactions with Sith lords, thus his appearance on the wordcloud is justified.</p>
 <p>The word “Squadron” appearing in the “Good” word cloud, which is the fighting unit of TIE fighters.</p>
@@ -355,10 +303,8 @@
 <div class="cell tag_remove-input docutils container">
 </div>
 <div class="cell tag_remove-input docutils container">
-<div class="cell_output docutils container">
-<img alt="_images/Page_NLP_16_0.png" src="_images/Page_NLP_16_0.png" />
 </div>
-</div>
+<p><img alt="5_main" src="_images/5_main.PNG" /></p>
 <p>The appearance of <a class="reference external" href="https://starwars.fandom.com/wiki/Poe_Dameron">Poe dameron</a> on Leia’s word cloud indicates their friendship on the Sequel Trilogy.</p>
 <p>In Luke’s word cloud we can understand the importance of the Jedi ‘text’ mentioned by Luke, and the word <a class="reference external" href="https://starwars.fandom.com/wiki/Grogu">Grogu (Baby Yoda)</a>, a character that ‘Luke’ rescues and proceeds to train in the Star Wars series “The Mandalorian”. Also, the word ‘nephew’ refering to Kylo Ren (his nephew) one of the main characters of the Sequel Trilogy.</p>
 <p>For Kenobi’s word cloud we can see he has a high connection with ‘Ashoka Tano’. That relationship is being explored in the Star Wars series ‘The Clone Wars.</p>
@@ -372,7 +318,7 @@
 <p>We’ll use the Latent Dirichlet Allocation (LDA) model which is an unsuperviced machine learning model, thus no previous labelling has to be made, and we only have to provide our corpus.</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/Page_NLP_20_0.png" src="_images/Page_NLP_20_0.png" />
+<img alt="_images/Page_NLP_22_0.png" src="_images/Page_NLP_22_0.png" />
 </div>
 </div>
 <div class="cell tag_remove-input docutils container">
@@ -380,11 +326,11 @@
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(0,
-  &#39;0.013*&quot;jedi&quot; + 0.007*&quot;first&quot; + 0.007*&quot;force&quot; + 0.007*&quot;order&quot; + 0.007*&quot;skywalker&quot; + 0.006*&quot;would&quot;&#39;),
+  &#39;0.011*&quot;jedi&quot; + 0.008*&quot;first&quot; + 0.007*&quot;skywalker&quot; + 0.007*&quot;force&quot; + 0.007*&quot;order&quot; + 0.005*&quot;would&quot;&#39;),
  (1,
-  &#39;0.009*&quot;jedi&quot; + 0.008*&quot;first&quot; + 0.007*&quot;skywalker&quot; + 0.006*&quot;force&quot; + 0.006*&quot;order&quot; + 0.005*&quot;would&quot;&#39;),
+  &#39;0.011*&quot;jedi&quot; + 0.007*&quot;force&quot; + 0.007*&quot;first&quot; + 0.006*&quot;skywalker&quot; + 0.006*&quot;order&quot; + 0.005*&quot;vader&quot;&#39;),
  (2,
-  &#39;0.010*&quot;jedi&quot; + 0.007*&quot;force&quot; + 0.007*&quot;first&quot; + 0.007*&quot;skywalker&quot; + 0.005*&quot;order&quot; + 0.005*&quot;vader&quot;&#39;)]
+  &#39;0.010*&quot;jedi&quot; + 0.007*&quot;first&quot; + 0.007*&quot;force&quot; + 0.007*&quot;skywalker&quot; + 0.006*&quot;order&quot; + 0.006*&quot;would&quot;&#39;)]
 </pre></div>
 </div>
 </div>
@@ -398,7 +344,7 @@
 <p>We will save the characters and their corresponding wikipage inside a dictionary. To do this we will loop over all characters and extract the text from <a class="reference external" href="https://starwars.fandom.com/wiki/Main_Page">WOOKIEEPEDIA</a>.</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/Page_NLP_26_0.png" src="_images/Page_NLP_26_0.png" />
+<img alt="_images/Page_NLP_28_0.png" src="_images/Page_NLP_28_0.png" />
 </div>
 </div>
 <p>The plot above shows the distribution of sentiment for all characters using two different methods. It is important to note, that the scale and mean are defined differently for the two methods.</p>
