@@ -328,56 +328,20 @@
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
-<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span><span class="o">/</span><span class="n">ipykernel_2292</span><span class="o">/</span><span class="mf">1899327667.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span><span class="o">/</span><span class="n">ipykernel_2976</span><span class="o">/</span><span class="mf">1899327667.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">create_wordclouds</span><span class="p">(</span><span class="n">anakin_dict</span><span class="p">)</span>
 
-<span class="nn">~\AppData\Local\Temp/ipykernel_2292/2765383741.py</span> in <span class="ni">create_wordclouds</span><span class="nt">(data)</span>
-<span class="g g-Whitespace">     </span><span class="mi">34</span>     <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">most_common_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-<span class="g g-Whitespace">     </span><span class="mi">35</span>         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">36</span>         <span class="n">wordcloud</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">collocations</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="n">col_word</span><span class="p">[</span><span class="n">a</span><span class="p">],</span>\
-<span class="g g-Whitespace">     </span><span class="mi">37</span>              <span class="n">max_font_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">relative_scaling</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">max_words</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">38</span>         <span class="n">width</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">)</span><span class="o">.</span><span class="n">generate_from_frequencies</span><span class="p">(</span><span class="n">most_common_dict</span><span class="p">[</span><span class="n">attribute</span><span class="p">])</span>
+<span class="nn">~\AppData\Local\Temp/ipykernel_2976/2765383741.py</span> in <span class="ni">create_wordclouds</span><span class="nt">(data)</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span>     <span class="c1">#Create wordclouds</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span>     <span class="n">col_word</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="s1">&#39;BuGn&#39;</span><span class="p">,</span> <span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="s1">&#39;Greens&#39;</span><span class="p">]</span> <span class="c1">#Colormap</span>
+<span class="ne">---&gt; </span><span class="mi">29</span>     <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/data/Stormtrooper.jpg&#39;</span><span class="p">))</span> <span class="c1">#Create shape image for wordclouds</span>
+<span class="g g-Whitespace">     </span><span class="mi">30</span>     <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span> 
 
-<span class="nn">~\anaconda3\lib\site-packages\wordcloud\wordcloud.py</span> in <span class="ni">generate_from_frequencies</span><span class="nt">(self, frequencies, max_font_size)</span>
-<span class="g g-Whitespace">    </span><span class="mi">494</span>             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">495</span>                 <span class="c1"># try to find a position</span>
-<span class="ne">--&gt; </span><span class="mi">496</span>                 <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">font_path</span><span class="p">,</span> <span class="n">font_size</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">497</span>                 <span class="c1"># transpose font optionally</span>
-<span class="g g-Whitespace">    </span><span class="mi">498</span>                 <span class="n">transposed_font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">TransposedFont</span><span class="p">(</span>
-
-<span class="nn">~\anaconda3\lib\site-packages\PIL\ImageFont.py</span> in <span class="ni">truetype</span><span class="nt">(font, size, index, encoding, layout_engine)</span>
-<span class="g g-Whitespace">    </span><span class="mi">853</span> 
-<span class="g g-Whitespace">    </span><span class="mi">854</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">855</span>         <span class="k">return</span> <span class="n">freetype</span><span class="p">(</span><span class="n">font</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">856</span>     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">857</span>         <span class="k">if</span> <span class="ow">not</span> <span class="n">isPath</span><span class="p">(</span><span class="n">font</span><span class="p">):</span>
-
-<span class="nn">~\anaconda3\lib\site-packages\PIL\ImageFont.py</span> in <span class="ni">freetype</span><span class="nt">(font)</span>
-<span class="g g-Whitespace">    </span><span class="mi">850</span> 
-<span class="g g-Whitespace">    </span><span class="mi">851</span>     <span class="k">def</span> <span class="nf">freetype</span><span class="p">(</span><span class="n">font</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">852</span>         <span class="k">return</span> <span class="n">FreeTypeFont</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">encoding</span><span class="p">,</span> <span class="n">layout_engine</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">853</span> 
-<span class="g g-Whitespace">    </span><span class="mi">854</span>     <span class="k">try</span><span class="p">:</span>
-
-<span class="nn">~\anaconda3\lib\site-packages\PIL\ImageFont.py</span> in <span class="ni">__init__</span><span class="nt">(self, font, size, index, encoding, layout_engine)</span>
-<span class="g g-Whitespace">    </span><span class="mi">185</span>         <span class="k">if</span> <span class="n">layout_engine</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">LAYOUT_BASIC</span><span class="p">,</span> <span class="n">LAYOUT_RAQM</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">186</span>             <span class="n">layout_engine</span> <span class="o">=</span> <span class="n">LAYOUT_BASIC</span>
-<span class="ne">--&gt; </span><span class="mi">187</span>             <span class="k">if</span> <span class="n">core</span><span class="o">.</span><span class="n">HAVE_RAQM</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">188</span>                 <span class="n">layout_engine</span> <span class="o">=</span> <span class="n">LAYOUT_RAQM</span>
-<span class="g g-Whitespace">    </span><span class="mi">189</span>         <span class="k">elif</span> <span class="n">layout_engine</span> <span class="o">==</span> <span class="n">LAYOUT_RAQM</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">HAVE_RAQM</span><span class="p">:</span>
-
-<span class="nn">~\anaconda3\lib\site-packages\PIL\ImageFont.py</span> in <span class="ni">__getattr__</span><span class="nt">(self, id)</span>
-<span class="g g-Whitespace">     </span><span class="mi">42</span>     <span class="c1"># module placeholder</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span>     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">44</span>         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;The _imagingft C module is not installed&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">45</span> 
-<span class="g g-Whitespace">     </span><span class="mi">46</span> 
-
-<span class="ne">ImportError</span>: The _imagingft C module is not installed
+<span class="ne">NameError</span>: name &#39;Image&#39; is not defined
 </pre></div>
 </div>
-<img alt="_images/Page_Script_14_1.png" src="_images/Page_Script_14_1.png" />
 </div>
 </div>
 <p>We see on Anakin’s word cloud from the second movie, words that describe his love for Padme such as ‘alive’ and ‘nervous’. The word ‘mom’ shows us how much he misses his mother in the second movie.</p>
