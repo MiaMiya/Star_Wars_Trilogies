@@ -9,49 +9,24 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
-import urllib.request as urllib2
-#from urllib.request import urlopen
-import json
 import re
-import urllib.parse
-import pickle
-from fa2 import ForceAtlas2
-import collections
-import powerlaw
 import os
 from nltk import FreqDist
 from nltk.corpus import stopwords
 from nltk import word_tokenize
 import nltk
-#from nltk.stem import WordNetLemmatizer
-import collections
 from IPython.display import Markdown as md
 import seaborn as sns
 from PIL import Image
 
-#from scipy.interpolate import interp1d
-#from pathlib import Path
 from wordcloud import WordCloud
 from nltk.corpus import PlaintextCorpusReader as pcr
-#from nltk.corpus import PlaintextCorpusReader
-#from nltk.tokenize import WordPunctTokenizer
-#import string
 import community
 from importlib import reload 
 reload(community)
-#from math import isnan
-#import random
-from fa2 import ForceAtlas2
-import random
-from bokeh.io import output_notebook, show
-from bokeh.models import Range1d, Circle, MultiLine, NodesAndLinkedEdges
-from bokeh.plotting import from_networkx
-#from bokeh.palettes import Blues8
-import bokeh.plotting.figure as bokeh_figure
 
 import gensim
 import gensim.corpora as corpora
-from gensim.models import CoherenceModel
 from gensim.test.utils import common_corpus
 import pyLDAvis
 import pyLDAvis.gensim_models
@@ -59,24 +34,25 @@ import warnings
 
 
 import re
-from bs4 import BeautifulSoup
-#from IPython.core.display import display, HTML
-import requests
 
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 get_ipython().run_line_magic('matplotlib', 'inline')
 
 
-# In[6]:
+# # Movie Scripts Analysis
+
+# In[2]:
 
 
+characters_df = pd.read_csv('data/characters.csv')
+characters_dropna = characters_df.dropna()
 corpus_root = os.getcwd() + '/data/characters/'
 file_list = characters_dropna['File_Name'] + '.txt'
 corpus = pcr(corpus_root, file_list)
 
 
-# In[ ]:
+# In[3]:
 
 
 def create_wordclouds(data):
@@ -129,7 +105,28 @@ def create_wordclouds(data):
 
 # ## Word clouds for Anakin/Darth Vader based on movies scripts
 
-# In[16]:
+# In[4]:
+
+
+wnl = nltk.WordNetLemmatizer()
+def clean_text(text, *args):
+    for name in args:
+        name = re.sub(r'\(|\)','',name)
+        for n in re.split(r'\s',name):
+            text = re.sub(n,'',text)
+
+    text = re.sub(r'===.*?===','',text) # removes paterns
+    text = re.sub(r'==.*?==','',text) 
+    text = re.sub(r'\{\{.*?\}\}','',text)
+
+    tokens = word_tokenize(text) # tokennizing the text
+    tokens = [wnl.lemmatize(w.lower()) for w in tokens if (w.lower() not in stopwords.words('english') and w.isalpha())] #changes to lower case and removes unwanted types
+
+    final_words = [word for word in tokens if len(word) > 3] #removing words under length 4
+    return final_words
+
+
+# In[5]:
 
 
 def first_trilogy_script(path):
@@ -156,7 +153,7 @@ def first_trilogy_script(path):
     return sw_df
 
 
-# In[19]:
+# In[6]:
 
 
 sw1_df = first_trilogy_script('data/script/Star Wars Episode I - The Phantom Menace.txt')
@@ -164,7 +161,7 @@ sw2_df = first_trilogy_script('data/script/Star Wars- Episode II - Attack of the
 sw3_df = first_trilogy_script('data/script/Star Wars- Episode III - Revenge of the Sith.txt')
 
 
-# In[20]:
+# In[7]:
 
 
 # Create function that filters the dialogues
@@ -186,7 +183,7 @@ def create_df_SW_OR(path):
     return df
 
 
-# In[21]:
+# In[8]:
 
 
 star_wars_IV_df = create_df_SW_OR('data/script/SW_EpisodeIV.txt')
@@ -194,7 +191,7 @@ star_wars_V_df = create_df_SW_OR('data/script/SW_EpisodeV.txt')
 star_wars_VI_df = create_df_SW_OR('data/script/SW_EpisodeVI.txt')
 
 
-# In[22]:
+# In[9]:
 
 
 # Create dataframe for each character 
@@ -209,7 +206,7 @@ def aug_df_SW(df):
     return pd.DataFrame({'Character': list_name, 'Dialogue': list_dia})
 
 
-# In[23]:
+# In[10]:
 
 
 star_wars_IV_df1 = aug_df_SW(star_wars_IV_df)
@@ -217,7 +214,7 @@ star_wars_V_df1 = aug_df_SW(star_wars_V_df)
 star_wars_VI_df1 = aug_df_SW(star_wars_VI_df)
 
 
-# In[ ]:
+# In[11]:
 
 
 anakin_dict = dict(zip(('Star Wars Episode 1', 'Star Wars Episode 2', 'Star Wars Episode 3'),
@@ -226,15 +223,20 @@ anakin_dict = dict(zip(('Star Wars Episode 1', 'Star Wars Episode 2', 'Star Wars
                     sw3_df["clean_text"]['ANAKIN'])))
 
 
-# In[ ]:
+# In[12]:
 
 
-create_wordclouds(anakin_dict)
+# Have troble plotting the word cloud for the wepage, but it works locally, thus we upload an image of it 
+#create_wordclouds(anakin_dict)
 
 
-# We see on Anakin's word cloud from the second movie, words that describe his love for Padme such as 'alive' and 'nervous'. The word 'mom' which show us how much he misses his mother in the second movie. Also in the third movie we can see more political words such as the 'senate', 'jedi council', 'war', and 'Chancellor' (referring to Chancellor Palpatine).
+# ![alliance](data/anakin_p.PNG)
 
-# In[ ]:
+# We see on Anakin's word cloud from the second movie, words that describe his love for Padme such as 'alive' and 'nervous'. The word 'mom' shows us how much he misses his mother in the second movie.
+# 
+# Also in the third movie, we can see more political words such as the 'senate', 'Jedi council', 'war', and 'Chancellor' (referring to Chancellor Palpatine).
+
+# In[13]:
 
 
 vader_dict = dict(zip(('Episode 4','Episode 5','Episode 6'),
@@ -243,15 +245,20 @@ vader_dict = dict(zip(('Episode 4','Episode 5','Episode 6'),
                     [word for sublist in star_wars_VI_df1['Dialogue'][star_wars_VI_df1['Character'] == 'VADER'] for word in sublist])))
 
 
-# In[ ]:
+# In[14]:
 
 
-create_wordclouds(vader_dict)
+# Have troble plotting the word cloud for the wepage, but it works locally, thus we upload an image of it 
+#create_wordclouds(vader_dict)
 
 
-# For the sixth movie we can see important words for the movie plot such as 'emperor', 'lightsaber', 'dark side', and 'sister'. Also on the fifth movie we observe that the word 'join' appears (from the famous sentence "join the dark side") and the most valuable word for the trilogy 'father'.
+# ![alliance](data/vader_o.PNG)
 
-# In[ ]:
+# For the sixth movie, we can see important words for the movie plot such as 'emperor', 'lightsaber', 'dark side', and 'sister'. 
+# 
+# Also in the fifth movie, we observe that the word 'join' appears (from the famous sentence "join the dark side") and the most valuable word for the trilogy is 'father'.
+
+# In[15]:
 
 
 #We create a list of words from Anakin's dialogue from the prequel trilogy
@@ -264,17 +271,20 @@ vader_dialogue = star_wars_IV_df1['Dialogue'][star_wars_IV_df1['Character'] == '
 anakin_vader_dict = {'Anakin Skywalker':anakin_dialogue, 'Darth Vader':vader_dialogue}
 
 
-# In[ ]:
+# In[16]:
 
 
-create_wordclouds(anakin_vader_dict)
+# Have troble plotting the word cloud for the wepage, but it works locally, thus we upload an image of it 
+#create_wordclouds(anakin_vader_dict)
 
+
+# ![alliance](data/anakin_vader.PNG)
 
 # By comparing Anakin to Darth Vader we can see a lot of descriptive words for example 'Padme' and 'right' which stem from Anakin trying to question if what he does is right. Then words such as 'sorry' and 'mother' create a more emotional thus human aspect to the character, but for Darth Vader's word cloud there are words such as 'emperor', 'destiny', 'rebels fighter', and 'rebellion'. His descriptive words have changed a lot after his transformation to the dark side. Also the word 'Luke' appears on Darth Vader's wordcloud which is his son (spoiler alert).
 
 # ## Word clouds for the two trilogies based on movies scripts
 
-# In[ ]:
+# In[17]:
 
 
 #We create a list with all the dialogues from Prequel Trilogy
@@ -287,13 +297,17 @@ prequel_dialogue = re.split(' ',' '.join([' '.join(i) for i in star_wars_IV_df1[
 original_prequel_dict = {'Original Trilogy':original_dialogue, 'Prequel Trilogy':prequel_dialogue}
 
 
-# In[ ]:
+# In[18]:
 
 
-create_wordclouds(original_prequel_dict)
+# Have troble plotting the word cloud for the wepage, but it works locally, thus we upload an image of it 
+#create_wordclouds(original_prequel_dict)
 
+
+# ![alliance](data/o_p.PNG)
 
 # We observe for the first wordcloud some descriptive words (of the trilogy plot) such as 'Chancellor', 'Padme', and the battle of 'Geonosis'.
+# 
 # For the Prequel Trilogy we observe words related to 'Han solo' and Princess 'Leia' such as 'princess', 'solo' ,'millennium' ,'Calrissian' (Known friend/allie of Han solo), 'Chewie' (his companion) and 'Jabba the Hut'.
 
 # # Sentiment analysis
@@ -301,11 +315,7 @@ create_wordclouds(original_prequel_dict)
 # ### Part 3.5.1: Analysis of Wikipage
 # <a id='S_wiki.'></a>
 
-# Wikipages are normally written in a neutral way. The sentiment analysis is thus not suited for wikipages but for the fun of it, let's try and see what will get out of it.
-# 
-# For sentiment analysis we will be using LabMT and VADER. Thus, we need to get these two methods ready. First, we load the txt file for the LabMT methods and initialize VADER.
-
-# In[ ]:
+# In[19]:
 
 
 # Load the LabMT data and convert to dictionary
@@ -320,7 +330,7 @@ analyzer = SentimentIntensityAnalyzer()
 wiki = {}
 
 
-# In[ ]:
+# In[20]:
 
 
 # Define function for compute LabMT sentiment for a text
@@ -357,7 +367,7 @@ def compute_avg_sentiment_LabMT(text):
     return s/n
 
 
-# In[ ]:
+# In[21]:
 
 
 # Define function for compute sentiment for a text
@@ -389,9 +399,9 @@ def compute_avg_sentiment_VADER(text):
 # <a id='S_script.'></a>
 
 # ### Loading the scripts
-# The wikipages are written in a neutral way, thus we found that it may be more interesting to take a look at the movie scripts. We wish to examen if we can find time in movies, where characters are more happy or sad. We start with load the scripts. As mentioned earlier the scripts for the original trilogy and the prequal trilogy are different, thus we need to define two different functions to create a dataframe for all dialogues appearing in chronological order. First, we will define the fucntion `create_df_SW_OR` which create the dataframe based on the txt file from [github](https://github.com/kamran786/Star-Wars-Movie-Scripts-Text-Analysis).
+# Original trilogy movie scripts are from [github](https://github.com/kamran786/Star-Wars-Movie-Scripts-Text-Analysis).
 
-# In[ ]:
+# In[22]:
 
 
 # Define function to load script of the original trilogy 
@@ -422,7 +432,9 @@ def create_df_SW_OR(path):
     return df
 
 
-# In[ ]:
+# Prequal movie scripts are from [script_I](https://www.actorpoint.com/movie-scripts/scripts/star-wars-the-phantom-menace.html), [script_II](http://sellascript.com/Source/resources/screenplays/attackoftheclones.htm), and [script_III](https://www.actorpoint.com/movie-scripts/scripts/star-wars-revenge-of-the-sith.html).
+
+# In[23]:
 
 
 def create_df_SW_PREQUAL(path):
@@ -456,7 +468,7 @@ def create_df_SW_PREQUAL(path):
     return df
 
 
-# In[ ]:
+# In[24]:
 
 
 # Load the script for the original trilogy
@@ -470,13 +482,13 @@ star_wars_II_df = create_df_SW_PREQUAL('data/script/Star Wars- Episode II - Atta
 star_wars_III_df = create_df_SW_PREQUAL('data/script/Star Wars- Episode III - Revenge of the Sith.txt')
 
 
-# In[ ]:
+# In[25]:
 
 
 star_wars_V_df.head()
 
 
-# In[ ]:
+# In[26]:
 
 
 # Create dataframe for all movies 
@@ -493,10 +505,7 @@ movies_index =['SW_I', 'SW_II', 'SW_III', 'SW_IV', 'SW_V', 'SW_VI']
 color_movie = [ 'hotpink', 'darkorchid', 'indigo', 'green', 'darkgreen', 'olive']
 
 
-# #### Initial overview
-# Now we have all the data ready. We will start by creating some simple plots to get an initial overview over the sentiment scores for the dialogues throughout the all the movies.
-
-# In[ ]:
+# In[27]:
 
 
 # Plot sentiment as timeseries
@@ -527,9 +536,10 @@ plt.legend(loc=(0.95,0.77))
 plt.show()
 
 
-# We have plotted the sentiment scores as a time series based on when the dialogue appears in all the movies. This plot is created in the chronological order meaning the prequal movies comes before the original movies. Form the plot we see that the sentiment varies a lot. We cannot see any clear indications of large period of time where characters are happy or sad.
+# We have plotted the sentiment scores as a time series based on when the dialogue appears in all the movies. This plot is created in chronological order meaning the prequel movies come before the original movies.  
+# From the plot, we see that the sentiment varies a lot. We cannot see any clear indications of a large period of time where characters are happy or sad.
 
-# In[ ]:
+# In[28]:
 
 
 # Plot distirubtion of sentiment 
@@ -551,22 +561,19 @@ plt.xlim([-1,1])
 plt.show()
 
 
-# Above we have the distribution plot for the sentiment using the two methods. We see that for both methods we have score across the whole range, but for both methods majority of the dialogues are categorized as neutral.
+# Above we have the distribution plot for the sentiment using the two methods. We see that for both methods we have scored across the whole range, but for both methods majority of the dialogues are categorized as neutral.
 
 # #### Character based analysis
-# We will take a look at the average sentiment for characters with the highes amount of dialogues. 
 
-# In[ ]:
+# In[29]:
 
 
 SW_script_df.groupby('Character').agg({'Dialogue': 'count', 'Sentiment_LabMT':'mean', 'Sentiment_VADER':'mean'})    .sort_values('Dialogue', ascending=False).head(10)
 
 
 # We can see the top 10 characters with most dialogues for both methods have an average sentiment of around 5 and 0 respectively to LabMT and VADER, which are categorized as neutral.
-# 
-# To take a detailed look into characters timeseries plot for sentiment, we will start with defining the function for plotting the timeseries based on a given character. 
 
-# In[ ]:
+# In[30]:
 
 
 def time_sentiment(df, name_list):
@@ -607,7 +614,7 @@ def time_sentiment(df, name_list):
 
 # From the word cloud we found that Anakin Skywalker (Darth Vader) had an interesting shift in the type of word occurring based on the movies. We will see if we can see a similar tendency in the sentiment based on the dialogues spoken by him. Additionaly, as previously mentioned he shifts form the light side to the dark side, thus we whish to see if this can be seen in the sentiment. 
 
-# In[ ]:
+# In[31]:
 
 
 time_sentiment(SW_script_df, ['ANAKIN','VADER'])
@@ -619,7 +626,7 @@ time_sentiment(SW_script_df, ['ANAKIN','VADER'])
 # 
 # We will look at Yoda's sentiment timeseries plot to see if the sentiment also varies.
 
-# In[ ]:
+# In[32]:
 
 
 time_sentiment(SW_script_df, ['YODA'])
@@ -632,20 +639,10 @@ time_sentiment(SW_script_df, ['YODA'])
 # ## Part 3.6: Hidden topic modeling
 # <a id='htm.'></a> 
 
-# Here we'll apply hidden topic modeling to two different corpuses and see how the topics are related to the documents.
-# 
-# We'll use the Latent Dirichlet Allocation (LDA) model which is an unsuperviced machine learning model, thus no previous labelling has to be made, and we only have to provide our corpus.
-
 # ### Part 3.6.1: Movie Scipts
 # <a id='htm_script.'></a> 
 
-# For this part we'll use the txt files generated in ?!?!?!?!?
-
-# We examine if the hidden topic modelling can detect 6 different topics (hidden topics = 6) for the 6 different movies. 
-# 
-# Thus we initialize by creating a corpus of the scripts for every movie. We reuse the data frames for the scripts defined in previous parts.
-
-# In[ ]:
+# In[33]:
 
 
 list_of_scripts = [re.split(' ',' '.join([' '.join(i) for i in sw1_df['clean_text'].values])),
@@ -656,9 +653,7 @@ re.split(' ',' '.join([' '.join(i) for i in star_wars_V_df1['Dialogue'].values])
 re.split(' ',' '.join([' '.join(i) for i in star_wars_VI_df1['Dialogue'].values]))]
 
 
-# With this we just need to build a dictionary with `corpora.Dictionary` which we can then use to map it to an index acordingly with `id2word.doc2bow`
-
-# In[ ]:
+# In[34]:
 
 
 id2word = corpora.Dictionary(list_of_scripts) # creating dictionary
@@ -673,12 +668,12 @@ model.show_topics(num_topics=6, num_words = 8) # printing out the words for the 
 # 
 # When mapping the topics with PCA we also see this problem:
 
-# In[ ]:
+# In[35]:
 
 
+temp = pyLDAvis.gensim_models.prepare(topic_model=model, corpus=common_corpus, dictionary=id2word)
 warnings.filterwarnings('ignore')
 warnings.simplefilter('ignore')
-temp = pyLDAvis.gensim_models.prepare(topic_model=model, corpus=common_corpus, dictionary=id2word)
 pyLDAvis.enable_notebook()
 pyLDAvis.display(temp)
 
@@ -690,9 +685,7 @@ pyLDAvis.display(temp)
 # 
 # 2) the movies are very similar. They are all from the same cinematic universe and movies 4 and 6 had the same plot of destroying the death star. Additionaly, the main characters are the same in the sequal, and in the prequals.
 
-# This is why we'll also look at choosing 2 hidden topics instead (one for each trilogy):
-
-# In[ ]:
+# In[36]:
 
 
 model = gensim.models.LdaModel(corpus = common_corpus, id2word = id2word, num_topics = 2, chunksize = 1, random_state = 5) #building model
@@ -703,7 +696,7 @@ model.show_topics(num_topics=2, num_words = 8) # printing out the words for the 
 # 
 # Finally, we'll do a hidden topic analyses for each movie sepperately:
 
-# In[ ]:
+# In[37]:
 
 
 i = 1

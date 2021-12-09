@@ -11,16 +11,10 @@ from matplotlib.pyplot import figure
 import pickle
 import os
 from nltk import FreqDist
-import seaborn as sns
 from PIL import Image
-
-#from scipy.interpolate import interp1d
-#from pathlib import Path
-from wordcloud import WordCloud
 from nltk.corpus import PlaintextCorpusReader as pcr
-#from nltk.corpus import PlaintextCorpusReader
-#from nltk.tokenize import WordPunctTokenizer
-#import string
+
+from wordcloud import WordCloud
 import community
 from importlib import reload 
 reload(community)
@@ -30,17 +24,14 @@ import gensim
 import gensim.corpora as corpora
 from gensim.models import CoherenceModel
 from gensim.test.utils import common_corpus
-import pyLDAvis
-import pyLDAvis.gensim_models
-import warnings
-
 
 import re
-#from IPython.core.display import display, HTML
-import requests
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from IPython.display import Markdown as md
 
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import warnings
+warnings.filterwarnings("ignore")
+
 get_ipython().run_line_magic('matplotlib', 'inline')
 
 
@@ -63,10 +54,19 @@ G_SW_GCC = SW_DG_GCC.to_undirected()
 with open('data/partition.pickle', 'rb') as handle:
     partition = pickle.load(handle)
 
+with open('data/wiki.pickle', 'rb') as handle:
+    wiki = pickle.load(handle)
+
+with open('data/dict_LabMT.pickle', 'rb') as handle:
+    dict_LabMT = pickle.load(handle)
+
+with open('data/dict_VADER.pickle', 'rb') as handle:
+    dict_VADER = pickle.load(handle)
+
 
 # # Word clouds
 
-# The word clouds help us extract meaning from large amounts of text by providing the most descriptive words in a document or corpus. We are extracting the most descriptive words based on two functions the Term Count (TC) and Inverse Document Frequency (IDF). TC function returns how many times a specific term (word) appears in a given document. IDF function returns a value related to how many document in a corpus a specific term (word) appears. Output of TC function can be described as how important a term is in a document. Output of IDF function can be described as how unique the term in the corpus is. By multiplying both outputs we aquire the most descriptive words for a document.
+# The word clouds help us extract meaning from large amounts of text by providing the most descriptive words in a document or corpus. We are extracting the most descriptive words based on two functions the Term Count (TC) and Inverse Document Frequency (IDF). TC function returns how many times a specific term (word) appears in a given document. IDF function returns a value related to how many documents in a corpus a specific term (word) appears. The output of the TC function can be described as how important a term is in a document. The output of the IDF function can be described as how unique the term in the corpus is. By multiplying both outputs we acquire the most descriptive words for a document.
 
 # ## Word clouds for alliance based on the wiki
 
@@ -152,14 +152,23 @@ def create_wordclouds(data):
 # In[8]:
 
 
-create_wordclouds(corpus_alliance)
+# Have troble plotting the word cloud for the wepage, but it works locally, thus we upload an image of it 
+#create_wordclouds(corpus_alliance)
 
 
-# As we observe from the evil alliance we can see names from evil characters such as General Hux which was the leader of the First Order. Surprisingly General Kenobi appears on the sith word cloud which is unusual because he is a Jedi, but he had a lot of interactions with Sith lords, thus his appearance on the wordcloud is justified. The word "Squadron" appearing in the "Good" word cloud, which is the fighting unit of TIE fighters. Finally for the Jedi wordcloud we can see the characters such as known Jedi [Shaak Ti](https://starwars.fandom.com/wiki/Shaak_Ti) appearing in Jedi wordcloud and General Windu but surprisingly we can also see relative names to the Jedis such as [Morgan Elsbeth](https://starwars.fandom.com/wiki/Morgan_Elsbeth) which we found her appearance in the Jedi wordcloud surprising after her duels with [Ashoka Tano](https://starwars.fandom.com/wiki/Ahsoka_Tano) and [Mandalorian](https://starwars.fandom.com/wiki/Din_Djarin) on the Star Wars Series "The Mandalorian".
+# ![alliance](data/alliance_wc.PNG)
+
+# As we observe from the evil alliance we can see names from evil characters such as General Hux which was the leader of the First Order. 
+# 
+# Surprisingly General Kenobi appears on the sith word cloud which is unusual because he is a Jedi, but he had a lot of interactions with Sith lords, thus his appearance on the wordcloud is justified. 
+# 
+# The word "Squadron" appearing in the "Good" word cloud, which is the fighting unit of TIE fighters. 
+# 
+# Finally, for the Jedi word cloud we can see the characters such as a known Jedi [Shaak Ti](https://starwars.fandom.com/wiki/Shaak_Ti) and General [Mace Windu](https://starwars.fandom.com/wiki/Mace_Windu), but surprisingly we can also see relatives of the Jedis such as [Morgan Elsbeth](https://starwars.fandom.com/wiki/Morgan_Elsbeth) which we found her appearance in the Jedi word cloud surprising after her duels with [Ashoka Tano](https://starwars.fandom.com/wiki/Ahsoka_Tano) and [Mandalorian](https://starwars.fandom.com/wiki/Din_Djarin) on the Star Wars Series "The Mandalorian".
 
 # ## Word clouds for 5 main characters based on wiki
 
-# In[15]:
+# In[9]:
 
 
 list_top_5 = [row['File_Name'] for i,row in characters_df.iterrows() if 'Human' in characters_df['Species'][i] if len(re.findall(r'\d',characters_df['Appearance'][i])) >= 7]
@@ -168,7 +177,7 @@ list_top_5
 
 # As we can observe above the most popular characters. From the light side Leia, Luke, and Obi-wan. From the dark side Darth Sidious, and Anakin Skywalker.
 
-# In[16]:
+# In[10]:
 
 
 corpus_root_top_5 = os.getcwd() + '/data/top_5/'
@@ -176,13 +185,24 @@ file_list_top_5 = pd.Series(list_top_5) + '.txt'
 corpus_top_5 = pcr(corpus_root_top_5, file_list_top_5)
 
 
-# In[17]:
+# In[11]:
 
 
-create_wordclouds(corpus_top_5)
+# Have troble plotting the word cloud for the wepage, but it works locally, thus we upload an image of it 
+#create_wordclouds(corpus_top_5)
 
 
-# The appearance of [Poe dameron](https://starwars.fandom.com/wiki/Poe_Dameron) on Leia's word cloud indicates their friendship on the Sequel Trilogy. In Luke's wordcloud we can understand the importance of jedi 'text' mentioned by Luke and the word [Grogu (Baby Yoda)](https://starwars.fandom.com/wiki/Grogu) that 'Luke' rescues and proceed to train in the Star Wars series "The Mandalorian". Also the word 'nephew' that indicates Kylo Ren (his nephew) one of the main characters of the Sequel Trilogy. For Kenobi's word cloud we can see he has a high connection with 'Ashoka Tano'. That relationship is being explored on the Star Wars series 'The Clone Wars'. And for Darth Sidious' word cloud we can see a highly descriptive world of 'Admiral Thrawn' which is a really important character in the Star Wars universe. Lastly for Anakin we see 'Commander Rex' which was a clone and his colleague for a long time in many wars also we can see again 'Ashoka Tano', Anakin's Padawan learner.
+# ![5_main](data/5_main.PNG)
+
+# The appearance of [Poe dameron](https://starwars.fandom.com/wiki/Poe_Dameron) on Leia's word cloud indicates their friendship on the Sequel Trilogy. 
+# 
+# In Luke's word cloud we can understand the importance of the Jedi 'text' mentioned by Luke, and the word [Grogu (Baby Yoda)](https://starwars.fandom.com/wiki/Grogu), a character that 'Luke' rescues and proceeds to train in the Star Wars series "The Mandalorian". Also, the word 'nephew' refering to Kylo Ren (his nephew) one of the main characters of the Sequel Trilogy.
+# 
+# For Kenobi's word cloud we can see he has a high connection with 'Ashoka Tano'. That relationship is being explored in the Star Wars series 'The Clone Wars.
+# 
+# And for Darth Sidious' word cloud we can see a highly descriptive world of 'Admiral Thrawn' which is a really important character in the Star Wars universe. 
+# 
+# Lastly, for Anakin we see 'Commander Rex' which was a clone and his colleague for a long time many wars also we can see again 'Ashoka Tano', Anakin's Padawan learner.
 
 # ## Part 3.6: Hidden topic modeling
 # <a id='htm.'></a> 
@@ -191,7 +211,7 @@ create_wordclouds(corpus_top_5)
 # 
 # We'll use the Latent Dirichlet Allocation (LDA) model which is an unsuperviced machine learning model, thus no previous labelling has to be made, and we only have to provide our corpus.
 
-# In[20]:
+# In[12]:
 
 
 freq = plt.hist(partition.values(), bins = len(set(partition.values())), rwidth = 0.5)
@@ -205,7 +225,7 @@ com_trilogy
 com_dict = dict(zip(list(com_trilogy['Community Size'].keys()), [[key for key, val in partition.items() if val == com] for com in com_trilogy['Community Size'].keys()]))
 
 
-# In[21]:
+# In[13]:
 
 
 corpus_root_com = os.getcwd() + '/data/Communities/'
@@ -214,7 +234,7 @@ corpus_com = pcr(corpus_root_com, file_list_com)
 com_top = [corpus_com.words(c) for c in corpus_com.fileids()]
 
 
-# In[22]:
+# In[14]:
 
 
 id2word = corpora.Dictionary(com_top)
@@ -236,141 +256,7 @@ model.show_topics(num_topics=3, num_words = 6)
 
 # We will save the characters and their corresponding wikipage inside a dictionary. To do this we will loop over all characters and extract the text from [WOOKIEEPEDIA](https://starwars.fandom.com/wiki/Main_Page).
 
-# In[ ]:
-
-
-# Define the names for loading URL
-characters_df['url_Name'] = characters_df['Name'].str.replace("/","_")
-all_txt = characters_df['url_Name'].str.replace(' ', '_').to_numpy()
-
-# Save find the characters with empty wiki pages 
-emp_char = []
-
-# Initialzation for loading the URL 
-baseurl = "https://starwars.fandom.com/api.php?"
-action = "action=query"
-content = "prop=extracts&exlimit=1&explaintext"
-dataformat = "format=json"
-
-# Loop over all character and extract the wiki page 
-for name in all_txt:
-
-    # Create empty dictrionary for the character name
-    wiki[name] = {}
-    
-    # Load the wikipages
-    title = "titles=" + name
-    queryChar = "{}{}&{}&{}&{}".format(baseurl, action, content, title, dataformat)
-    temp = ''.join(chr(ord(c)) for c in urllib.parse.quote(queryChar))
-    temp = np.char.replace(temp, '%3A', ':')
-    temp = np.char.replace(temp, '%3F', '?')
-    temp = np.char.replace(temp, '%3D', '=')
-    queryChar = str(np.char.replace(temp, '%26', '&'))
-
-    # Open and load the wikipage 
-    response = urllib2.urlopen(queryChar) # Load wiki
-    wiki_char = json.load(response)
-
-    # Extract the text inside the wikipage 
-    page_id = list(wiki_char['query']['pages'].keys())[0]
-    text_temp = wiki_char['query']['pages'][page_id].get('extract',None)
-
-    # Finding the workcout of wikipage and adding it to the dictionary
-    if text_temp:
-      lines = text_temp
-      pattern = re.compile(r'\w+')
-      wiki[name]['word_count'] = len(pattern.findall(lines))
-    else: 
-      print(f'No wiki page found for {name}')
-      emp_char.append(name)
-      lines = ''
-      wiki[name]['word_count'] = 0
-
-    # Saving the wiki pages inside the dictionary
-    wiki[name]['wiki'] = lines
-
-
-# In[ ]:
-
-
-# Define function for compute LabMT sentiment for a text
-def compute_avg_sentiment_LabMT(text):
-    # Join all sentences to one string
-
-    # Clean text 
-    words_final = clean_text(text)
-    
-    # Initialization to store values
-    s = 0
-    n = 0
-
-    # Using freqDist to only loop over unique words 
-    fdist = FreqDist(w for w in words_final)
-    word_unique = [word for word in fdist.keys()]
-    word_fre = [f for f in fdist.values()]
-
-    # Loop over words 
-    for i in range(len(fdist)):
-        w = word_unique[i]
-        f = word_fre[i]
-
-        # Get the LabMT score
-        S_v = LabMT_dict.get(w, None)
-
-        # Weight the socre by the frequency
-        if S_v is not None:
-            s += f * LabMT_dict.get(w, None)
-            n += f
-            
-    if n == 0:
-        return np.nan
-    return s/n
-
-
-# In[ ]:
-
-
-# Define function for compute sentiment for a text
-def compute_avg_sentiment_VADER(text):
-    if len(text) == 0:
-        return 0
-    
-    # Convert the text file to the right format, where each line is a  new element
-    text = text.split('\n')
-    if len(text) == 1:
-        text = [text, '']
-
-    # Initialzation 
-    s = 0
-    len_VADER = 0
-
-    # Compute polarity for each sentence in text 
-    for sentence in text:
-        if sentence:
-            vs = analyzer.polarity_scores(sentence)
-            s += vs['compound']
-            len_VADER += 1
-            
-    # Retur the average polarity
-    return s/len_VADER
-
-
-# In[ ]:
-
-
-## Loop through all 
-dict_LabMT = {}
-dict_VADER = {}
-for key in wiki:
-    LabMT_v = compute_avg_sentiment_LabMT(wiki[key]['wiki'])
-    VADER_v = compute_avg_sentiment_VADER(wiki[key]['wiki'])
-    dict_LabMT[key] = LabMT_v
-    dict_VADER[key] = VADER_v
-    wiki[key]['LabMT'] = LabMT_v
-    wiki[key]['VADER'] = VADER_v
-
-
-# In[ ]:
+# In[15]:
 
 
 figure(figsize = (18,6))
@@ -391,15 +277,15 @@ plt.xlim([-1,1])
 plt.show()
 
 
-# The plot above shows the distribution of sentiment for all characters using the two different methods. It is importent to note, that the scale and mean are defined differently for the two methods. 
+# The plot above shows the distribution of sentiment for all characters using two different methods. It is important to note, that the scale and mean are defined differently for the two methods. 
 # 
-# On the left-hand side, we see the results from LabMT. The average for this method is 5 and we can see that the majority of the of the characters are slightly above average. But the values are close to 5 which means they will still be categorized as neutral. On the right-hand side, we have the distribution created by the VADER method. Here we see that the mean is zero and the vast majority are below 0. Furthermore, we see that some will be classified as negative since they have a score lower than -0.5. 
+# On the left-hand side, we see the results from LabMT. The average for this method is 5 and we can see that the majority of the characters are slightly above average. But the values are close to 5 which means they will still be categorized as neutral. On the right-hand side, we have the distribution created by the VADER method. Here we see that the mean is zero and the vast majority are below 0. Furthermore, we see that some will be classified as negative since they have a score lower than -0.5. 
 # 
-# As we can see the two methods results in very different results. This is due to the different approach these two methods use. The VADER uses a combination of the rule-based and dictionary-based approach which means more aspects are picked up from text files, such as negation and conjunctions. Furthermore, we see that the VADER shows, that there are characters who will be categorized as negative. A reason for the sentiment analysis score being low, could be because the Star Wars movies are talking about war with a lot of weapons and describing evil and good. Since most of the words related to war are categorized as negative this explains why the sentiment is tilted towards negative.
+# As we can see the two methods results in very different results. This is due to the different approaches these two methods use. The VADER uses a combination of the rule-based and dictionary-based approach which means more aspects are picked up from text files, such as negation and conjunctions. Furthermore, we see that the VADER shows, that there are characters who will be categorized as negative. A reason for the sentiment analysis score being low could be because the Star Wars movies are talking about war with a lot of weapons and describing evil and good. Since most of the words related to war are categorized as negative this explains why the sentiment is tilted towards negative.
 # 
-# The VADER method categorized some character not as neutral, we will take a closer look at these characters. 
+# The VADER method categorized some characters not as neutral, we will take a closer look at these characters. 
 
-# In[ ]:
+# In[16]:
 
 
 # Sort the dictionary based on VADER score 

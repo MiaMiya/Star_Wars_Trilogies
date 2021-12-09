@@ -21,17 +21,16 @@ from bokeh.plotting import from_networkx
 import bokeh.plotting.figure as bokeh_figure
 from IPython.display import Markdown as md
 import collections
-
-
-
-#from IPython.display import display
-#from IPython.core.display import display as disp, HTML
-#from ipywidgets import widgets, interact, interactive, fixed, interact_manual
-#from IPython.display import Image
+import seaborn as sns
+from nltk.corpus import PlaintextCorpusReader as pcr
+import nltk
+from nltk import FreqDist
+import os 
+import warnings
+warnings.filterwarnings("ignore")
 
 
 # # The Star Wars network
-
 # ## Visulization of the network
 
 # In this part we will visualize the network based on different factors using the GCC graph. In all the plots the node size is based on the degree of the node. In the first plot we wish to color the nodes based on the _Alliance_ for a character, thus we have created a function `map_color` which will be able generate the corresponding color based on _Alliance_. We have defined the colors as:  
@@ -63,8 +62,6 @@ G_SW_GCC = SW_DG_GCC.to_undirected()
 with open('data/partition.pickle', 'rb') as handle:
     partition = pickle.load(handle)
 
-
-# We start with creating a simple visulization to get an quick glanse at the graph.
 
 # In[3]:
 
@@ -118,10 +115,10 @@ plt.title("Star Wars network of characters using degree as size and colored base
 plt.show()
 
 
-# We see that there are a lot of nodes and there are not many evil and Sith characters. To get a better understanding we will create an interactive graph.  
-# Create a new postion with changed weight for the variables.
+# We can see that the graph has a lot of nodes. As expected there is a small amount of Evil and Sith characters. To get a better understanding we will create an interactive graph.  
+# Create a new postion with changed weights for the variables.
 # 
-# The interactive graph will again be color based on the _alliance_ and the size is based on the degree. In contrast to the first plot, we will scale the node size such we can see a more significant difference between nodes. Furthermore, we have added some of the attributes to the interactive graph.
+# The interactive graph will be color based on the _alliance_ and the size is based on the node degree. In contrast to the first plot, we will scale the node size such we can see a more significant difference between nodes. Furthermore, we have added some of the attributes to the interactive graph.
 
 # In[5]:
 
@@ -198,9 +195,13 @@ plot.renderers.append(network_graph)
 show(plot)
 
 
-# We can see that the main characters for movies are the ones with the largest node size. We see none of the larger nodes are categorized as evil or Sith, this also correspond with the bad guys in the movies are mainly without names. We see the largest node is _Anakin Skywalker_ (Darth Vader) and he is categorized as mix, which is corrected due to the transformation in the prequals, he turns from the light side to the dark side. _Darth Sidious_ is also categorized as mix, this is not completely correct. He is the evil all through the movies, but due to him pretending to be good.
+# We can see that the main characters for movies are the ones with the largest node size. None of the larger nodes are categorized as Evil or Sith, this also corresponds with the bad guys in the movies are mainly without names. 
+# 
+# We see the largest node is _Anakin Skywalker_ (Darth Vader) and he is categorized as mix, which is correct due to his transformation, from the light side he joins the dark side.
+# 
+# _Darth Sidious_ is also categorized as mix, which it might seem inaccurate. But in the prequel movies he appears as a good guy but in reality he is a Sith lord (pure evil character).
 
-# We will now look at the communities for our GCC network. We will talk more about the communities in Part 5 Community Analysis. Here we will simply create the communties and take a look at the plot for it. 
+# We will now look at the communities of our GCC network. We will talk more about the communities in Part 5 Community Analysis. Here we will simply create the communties and take a look at the plot for it.
 
 # In[6]:
 
@@ -305,7 +306,7 @@ show(plot)
 
 # ## Analysis of largest degree counts
 
-# We will now take a look closer look at the network such as the degree distribution. 
+# We will now take a look at a network attribute such as the degree distribution.
 
 # In[7]:
 
@@ -329,15 +330,13 @@ for node in SW_DG_GCC:
 SW_degree = pd.DataFrame(data, columns =['Name', 'Degree', 'in_degree', 'out_degree'])
 
 
-# Let's start by taking a look at the characters with the highest degree in the undirected graph:
-
 # In[10]:
 
 
 print("Characters with highest degrees:\n", SW_degree[['Name','Degree']].sort_values("Degree", ascending=False).head(5))
 
 
-# Unsuprisingly given that we are in the Skywalker saga (Movies 1-9), we see a lot of Skywalkers. Futheremore, Anakin/Darth Vader in one/the main character in movies 1-6, whereas no other characters have the same significance in more than 3 movies. 
+# Unsuprisingly given that we are in the Skywalker saga (Movies 1-9), we see a lot of Skywalkers. Futhermore, Anakin/Darth Vader is the main character in movies 1-6, whereas no other characters have the same significance in more than 3 movies. 
 # 
 # Looking at the directed graph we see new characters:
 
@@ -348,9 +347,9 @@ print("\nCharacter with highest in-degree:\n", SW_degree[['Name','in_degree']].s
 print("\nCharacter with highest out-degree:\n", SW_degree[['Name','out_degree']].sort_values("out_degree", ascending=False).head(5))
 
 
-# Anakin is still the character with the largest degree both in/out. However, Darth Sidious has a higher in-degree than both Obi-Wan and Leia. This is unsuprising as Darth Sidius/Palpatine, is the main villian in the Skywalker Saga. But for movies 1-3 and 7-9, he works like a pupoteer behind the scenes. Thus a lot of characters will reference him, as they are controled/inifluenced by him.
+# Anakin is still the character with the largest degree both in/out. However, Darth Sidious has a higher in-degree than both Obi-Wan and Leia. This is unsuprising as Darth Sidius/Palpatine, is the main villian in the Skywalker Saga. But for movies 1-3 and 7-9, he works like a puppeteer behind the scenes. Thus a lot of characters will reference him, as they are controlled or influenced by him.
 # 
-# Leia has a higher out-degree compared to in-degree and degree. This also makes sence she is a front person organising the resistence.
+# Leia has a higher out-degree compared to in-degree and degree. This also makes sense she is a front person organising the resistence.
 
 # ## Analysis of degree distribution
 
@@ -401,9 +400,7 @@ plt.title('Loglog plot for out-degree distribution')
 plt.show()
 
 
-# At a quick glance it seems clear the the two distributions follow a power law, but let's take a closer look.
-
-# In[25]:
+# In[14]:
 
 
 # plot for in_degree
@@ -435,7 +432,10 @@ plt.show()
 # 
 # Looking at figures directly above it seems power law is a good fit for the in- and out-degree distribution, meaning it's a scale free network.
 #   
-# For the network exponents $\gamma$ we see that they are quite low, which means the probability of high degree node $\langle k\rangle$ is exponentially high. This we can see from the power law given that $$P(k) = k^{-\gamma}$$
+# For the network exponents $\gamma$ we see that they are quite low, which means the probability of high degree node $\langle k\rangle$ is exponentially high. This we can see from the power law given that 
+# $
+# P(k) = k^{-\gamma}
+# $
 # 
 # The fact that $\gamma_{in} < \gamma_{out}$ is very unusual. When comparing this to the [Network Science Book](http://networksciencebook.com/chapter/4#scale-free) section 4.4 it never hold true (except for email where it makes sence it's reversed). Importantly given that our graph is based on the [Wookieepedia](https://starwars.fandom.com/wiki/Main_Page) which follows the same format is Wikipedia, where $\gamma_{in} > \gamma_{out}$ [Wikipedia Network](https://arxiv.org/abs/physics/0602149) page 2, this property is highly unusual. Finally, looking at the degree counts for in/out-degree we see that there are nodes with much higher in-degree than out-degree. Thus the powerlaw fit must be a little off. Looking at the plot above, we also see that there seems to be a preference to the lower degree for the blue graph (in-degree) compared to the red graph (out-degree). Looking at the red graph (out-degree) this bias happens because there are a lot of nodes in the middle with higher probability which we see in the form of a little top. Compare this to the blue graph (in-degree) where the middle part much more closely follows our fit. 
 # 
@@ -448,116 +448,15 @@ plt.show()
 # 
 # Looking at the [Wookieepedia](https://starwars.fandom.com/wiki/Main_Page) and thinking of it's real world properties, it would make sense that $\gamma_{in}>\gamma_{out}$ as many articles will reference main characters (like Luke Skywalker), but the article for Luke Skywalker won't reference all the characters back. This is also known as the 80/20 rule, which is also applicable to many other real world situations like a social network, Citation Network etc, where the few (20) are in control of the many (80).
 
-# For a final power law fit, we'll also look at the undirected graph and compare to a random graph (ER graph):
-
-# In[26]:
-
-
-# Create the total undirected network 
-SW_G_GCC = SW_DG_GCC.to_undirected().copy()
-
-
-# In[27]:
-
-
-# Number of nodes
-N = SW_DG_GCC.number_of_nodes() 
-
-# Average degree 
-k = [d for _, d in SW_DG_GCC.degree()] #list of degrees in the Zelda BotW network
-k_mean = np.mean(k) # average degree
-
-# probability 
-p = k_mean/(N-1)
-
-# Generate directed ER network of same size and p 
-G_ER = nx.erdos_renyi_graph(n = N, p = p, directed =True)
-
-
-# In[28]:
-
-
-#The distribution of degree for undirected
-degree_sequence_undir_SW = sorted([d for _, d in SW_G_GCC.degree()])  # degree sequence
-degreeCount_undir_SW = collections.Counter(degree_sequence_undir_SW)
-deg_SW, cnt_SW = zip(*degreeCount_undir_SW.items())
-
-#The distribution of degree for undirected random graph
-G_ER_undir = nx.erdos_renyi_graph(n = N, p = p)
-degree_sequence_undir_ER = sorted([d for _, d in G_ER_undir.degree()])  # degree sequence
-degreeCount_undir_ER = collections.Counter(degree_sequence_undir_ER)
-deg_ER, cnt_ER = zip(*degreeCount_undir_ER.items())
-
-
-# We can plot it and compare to our undiredted star wars graph, and do a power law fit.
-
-# In[29]:
-
-
-plt.figure(figsize = [14, 14])
-subax1 = plt.subplot(211)
-p1, = plt.plot(deg_SW, np.array(list(cnt_SW))/np.size(degree_sequence_undir_SW), 'sr') # degree probability of undirected SW graph
-p2, = plt.plot(deg_ER, np.array(list(cnt_ER))/np.size(degree_sequence_undir_ER), '*b') # degree probability of undirected ER graph
-plt.legend(loc="upper left")
-plt.xlabel('Degree')
-plt.ylabel('P(k)')
-plt.xlim([-1,25])
-plt.legend([p1, p2],["Star Wars", "Random"])
-plt.title('plot for in-degree distribution')
-
-subax2 = plt.subplot(212)
-p1, = plt.loglog(deg_SW, np.array(list(cnt_SW))/np.size(degree_sequence_undir_SW), 'sr') # degree probability of undirected SW graph
-fit = powerlaw.Fit(np.array(degree_sequence_undir_SW)+1, suppress_output=True, xmin = 1, discrete = True) # power law fit
-fit.power_law.plot_pdf(color= 'r',linestyle='--',label='fit pdf') # plotting the power law fit as a line
-p2, = plt.loglog(deg_ER, np.array(list(cnt_ER))/np.size(degree_sequence_undir_ER), '*b') # degree probability of undirected ER graph
-plt.xlabel('Degree')
-plt.ylabel('P(k)')
-plt.legend([p1, p2],["Star Wars", "Random"])
-plt.title('Loglog plot for out-degree distribution\n $\gamma_{SW}$ = '+ str(round(fit.power_law.alpha,4)))
-
-plt.show()
-
-
-# From the plot above, it is clear that the ER graph does not follow a power law, but that the undirected Star Wars network does. We can also see that the random graph follows a typical poisson distribution. 
-# 
-# Finally, we see that with the combinatoion of high degree nodes from the in-degree distribution and the high probability of middle degree nodes from out-degree distribution, we get the power law fit with the lowest $\gamma = 1.40$, which is also too low when comparing to other network (exactly as we did for in/out-degree distribution). 
-
-# Looking at degree statistics for the ER graph:
-
-# In[30]:
-
-
-# Degree distribution for in- and out-degree 
-degree_sequence_in_ER = sorted([d for _, d in G_ER.in_degree()])  # degree sequence
-degreeCount_in_ER = collections.Counter(degree_sequence_in_ER)
-deg_in_ER, cnt_in_ER = zip(*degreeCount_in_ER.items())
-
-degree_sequence_out_ER = sorted([d for _, d in G_ER.out_degree()])  # degree sequence
-degreeCount_out_ER = collections.Counter(degree_sequence_out_ER)
-deg_out_ER, cnt_out_ER = zip(*degreeCount_out_ER.items())
-
-print('The maximum in-degree in the random network is ', max(degree_sequence_in_ER))
-print('The minimum in-degree in the random network is ', min(degree_sequence_in_ER))
-
-print('The maximum out-degree in the random network is ', max(degree_sequence_out_ER))
-print('The minimum out-degree in the random network is ', min(degree_sequence_out_ER))
-
-
-# We also see that there are no nodes with high degree count exactly as expected, given that it does not posses the scale-free property.
-
 # # Community analysis
 
-# In[ ]:
+# In[15]:
 
 
-md(f"The Louvain algorithm found {len(set(partition.values()))} communities for the botw network. The modularity is {community.modularity(partition, G_SW_GCC):.2f}.")
+md(f"The Louvain algorithm found {len(set(partition.values()))} communities for the Star Wars network. The modularity is {community.modularity(partition, G_SW_GCC):.2f}.")
 
 
-# The community size is approx 14-19 (remember the partitions are a little random). To take a closer look at the communities we look a the distribution of community sizes.
-
-# We plot the distribution of community sizes.
-
-# In[ ]:
+# In[16]:
 
 
 plt.figure(figsize = [12, 12])
@@ -570,9 +469,7 @@ plt.ylabel('Count')
 plt.show()
 
 
-# As we show in the plot for the network. The nodes with the main character for eac of the three trilogies are split into different communites, thus we will take closer look at these three comunities. 
-
-# In[ ]:
+# In[17]:
 
 
 community_size.rename(columns = {0:'Community Size'}, inplace = True) #renaming column
@@ -581,26 +478,27 @@ com_trilogy.rename(columns = {0:'Community Size', 1:'Trilogy'}, inplace = True)
 com_trilogy
 
 
-# We create a dictionary with TF-IDF based rankings of words in each community
-
-# In[ ]:
+# In[18]:
 
 
 com_dict = dict(zip(list(com_trilogy['Community Size'].keys()), [[key for key, val in partition.items() if val == com] for com in com_trilogy['Community Size'].keys()]))
 
 
-# Now we are saving the text from the APIs for all the names in the communities
-
-# In[ ]:
+# In[19]:
 
 
-if not os.path.exists('data/Communities'):
-    os.makedirs('data/Communities')
+characters_dropna = characters_df.dropna()
 
 
-# We create the corpus for the communities
+# In[20]:
 
-# In[ ]:
+
+corpus_root = os.getcwd() + '/data/characters/'
+file_list = characters_dropna['File_Name'] + '.txt'
+corpus = pcr(corpus_root, file_list)
+
+
+# In[21]:
 
 
 corpus_root_com = os.getcwd() + '/data/Communities/'
@@ -608,9 +506,7 @@ file_list_com = pd.Series([str(key) + '.txt' for key in com_dict.keys()])
 corpus_com = pcr(corpus_root_com, file_list_com)
 
 
-# We filter names from dictionary to match with the actual text file names
-
-# In[ ]:
+# In[22]:
 
 
 for com in com_dict.keys():
@@ -619,9 +515,7 @@ for com in com_dict.keys():
             com_dict[com][index] = j
 
 
-# We create corpus for community analysis
-
-# In[ ]:
+# In[23]:
 
 
 for com in com_dict.keys():
@@ -636,12 +530,25 @@ for com in com_dict.keys():
         f.write(temp_string)
 
 
-# Define function that returns the top 5 words based on tf-idf
-
-# In[ ]:
+# In[24]:
 
 
-def top_3_words(corpus):
+def top_5_words_tf(corpus):
+    #Dictionary that includes the total number of words on each document
+    sum_dict = {d:sum([val for _,val in FreqDist(corpus.words(d)).most_common()]) for d in corpus.fileids()}
+    
+    #Dictionary with values the term frequency for each word for each document
+    tf_dict = {d:{term:(term_count/sum_dict[d]) for term,term_count in FreqDist(corpus.words(d)).most_common()} for d in corpus.fileids()}    
+
+    for community_index in tf_dict.keys():
+        top5 = [word for word,_ in sorted(tf_dict[community_index].items(), key=lambda item: item[1],reverse=True)][:5]
+        print(f"The 3 TF words for the community no. {community_index.replace('.txt','')} are {top5}")
+
+
+# In[25]:
+
+
+def top_5_words_tf_idf(corpus):
     #Dictionary that includes the total number of words on each document
     sum_dict = {d:sum([val for _,val in FreqDist(corpus.words(d)).most_common()]) for d in corpus.fileids()}
     
@@ -663,13 +570,21 @@ def top_3_words(corpus):
 
     for community_index in tf_idf_dict.keys():
         top5 = [word for word,_ in sorted(tf_idf_dict[community_index].items(), key=lambda item: item[1],reverse=True)][:5]
-        print(f"The 3 top words for the community no. {community_index.replace('.txt','')} are {top5}")
+        print(f"The 3 TF-IDF words for the community no. {community_index.replace('.txt','')} are {top5}")
 
 
-# In[ ]:
+# In[26]:
 
 
-top_3_words(corpus_com)
+top_5_words_tf(corpus_com)
+print('\n')
+top_5_words_tf_idf(corpus_com)
 
 
-# From the list of most descriptive words we can identity as the first community associated with evil and the dark side the second community associated with jedis and the light side and the third community with the resistant fighter such as [Jyn Erso](https://starwars.fandom.com/wiki/Jyn_Erso) the daughter of the builder of Death Star and [Wedge Antilles](https://starwars.fandom.com/wiki/Wedge_Antilles) a known tie fighter pilot amongst the resistance.
+# Community 1 is the first trilogy, community 5 is the second trilogy, and community 4 is the third trilogy (See 'Star Wars interactive network based on communities').
+# 
+# Interestingly we see two very different results for TF and TF-IDF.
+# 
+# For TF we see the words we'd expect of a Star Wars movie like 'Jedi', 'skywalker', and 'force'. But these words are very frequent in the Star Wars trilogy, and thus when we apply the IDF, these words are removed, as they are not unique to the trilogies. 
+# 
+# For TF-IDF we see much more trilogy-specific and thus less known words like Cody a clone trooper from movie 3, Rebo a musician from the 6th movie, and Doza a piloted only noted to have been in the 9th movie.
