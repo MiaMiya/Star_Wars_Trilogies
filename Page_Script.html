@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Word clouds &#8212; The Skywalker Saga</title>
+    <title>Movie Scripts Analysis &#8212; The Skywalker Saga</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -113,7 +113,7 @@
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Word clouds
+   Movie Scripts Analysis
   </a>
  </li>
 </ul>
@@ -222,6 +222,11 @@
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
+   Movie Scripts Analysis
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#word-clouds">
    Word clouds
   </a>
   <ul class="visible nav section-nav flex-column">
@@ -291,253 +296,43 @@
         
               <div>
                 
-  <div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">figure</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">FreqDist</span>
-<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
-<span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">word_tokenize</span>
-<span class="kn">import</span> <span class="nn">nltk</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span> <span class="k">as</span> <span class="n">md</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-
-<span class="kn">from</span> <span class="nn">wordcloud</span> <span class="kn">import</span> <span class="n">WordCloud</span>
-<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">PlaintextCorpusReader</span> <span class="k">as</span> <span class="n">pcr</span>
-<span class="kn">import</span> <span class="nn">community</span>
-<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">reload</span> 
-<span class="n">reload</span><span class="p">(</span><span class="n">community</span><span class="p">)</span>
-
-<span class="kn">import</span> <span class="nn">gensim</span>
-<span class="kn">import</span> <span class="nn">gensim.corpora</span> <span class="k">as</span> <span class="nn">corpora</span>
-<span class="kn">from</span> <span class="nn">gensim.test.utils</span> <span class="kn">import</span> <span class="n">common_corpus</span>
-<span class="kn">import</span> <span class="nn">pyLDAvis</span>
-<span class="kn">import</span> <span class="nn">pyLDAvis.gensim_models</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-
-
-<span class="kn">import</span> <span class="nn">re</span>
-
-
-<span class="kn">from</span> <span class="nn">vaderSentiment.vaderSentiment</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
-<span class="o">%</span><span class="k">matplotlib</span> inline 
-</pre></div>
+  <div class="cell tag_remove-input docutils container">
 </div>
+<div class="tex2jax_ignore mathjax_ignore section" id="movie-scripts-analysis">
+<h1>Movie Scripts Analysis<a class="headerlink" href="#movie-scripts-analysis" title="Permalink to this headline">¶</a></h1>
+<div class="cell tag_remove-input docutils container">
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">characters_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/characters.csv&#39;</span><span class="p">)</span>
-<span class="n">characters_dropna</span> <span class="o">=</span> <span class="n">characters_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-<span class="n">corpus_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/data/characters/&#39;</span>
-<span class="n">file_list</span> <span class="o">=</span> <span class="n">characters_dropna</span><span class="p">[</span><span class="s1">&#39;File_Name&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span>
-<span class="n">corpus</span> <span class="o">=</span> <span class="n">pcr</span><span class="p">(</span><span class="n">corpus_root</span><span class="p">,</span> <span class="n">file_list</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_wordclouds</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="c1">#The if statement filter the object between a corpus and a dictionary</span>
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="n">tc_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">document</span><span class="p">:{</span><span class="n">term</span><span class="p">:</span><span class="n">term_count</span> <span class="k">for</span> <span class="n">term</span><span class="p">,</span><span class="n">term_count</span> <span class="ow">in</span> <span class="n">FreqDist</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">document</span><span class="p">])</span><span class="o">.</span><span class="n">most_common</span><span class="p">()}</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">tc_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">document</span><span class="p">:{</span><span class="n">term</span><span class="p">:</span><span class="n">term_count</span> <span class="k">for</span> <span class="n">term</span><span class="p">,</span><span class="n">term_count</span> <span class="ow">in</span> <span class="n">FreqDist</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">document</span><span class="p">))</span><span class="o">.</span><span class="n">most_common</span><span class="p">()}</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">fileids</span><span class="p">()}</span>
-    
-    <span class="c1">#Dictionary with IDF values for each unique word</span>
-    <span class="n">idf_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="n">term</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]):</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tc_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="c1">#Total number of words inside document</span>
-        <span class="n">nt</span> <span class="o">=</span> <span class="mi">0</span> 
-        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">nt</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># nt describes in how many documents the term appears</span>
-        <span class="n">idf_dict</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">N</span><span class="o">/</span><span class="n">nt</span><span class="p">),</span><span class="mi">4</span><span class="p">)</span> <span class="c1">#Calculate Inverse Term Frequency</span>
-    
-    <span class="c1">#Dictionary with TC-IDF values for each word for each document</span>
-    <span class="n">tc_idf_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">document</span><span class="p">:{</span><span class="n">term</span><span class="p">:</span><span class="n">tc_dict</span><span class="p">[</span><span class="n">document</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">)</span><span class="o">*</span><span class="n">idf_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">)</span> <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="p">[</span><span class="n">document</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>\
-         <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
-    
-    <span class="c1">#Dictionary with TC-IDF values of the top 200 words for each docoment</span>
-    <span class="n">most_common_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">document</span><span class="p">:{</span><span class="n">word</span><span class="p">:</span><span class="n">value</span> <span class="k">for</span> <span class="n">word</span><span class="p">,</span><span class="n">value</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tc_idf_dict</span><span class="p">[</span><span class="n">document</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>\
-         <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">200</span><span class="p">]}</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">tc_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
-    
-
-    <span class="c1">#Create wordclouds</span>
-    <span class="n">col_word</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="s1">&#39;BuGn&#39;</span><span class="p">,</span> <span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="s1">&#39;Greens&#39;</span><span class="p">]</span> <span class="c1">#Colormap</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/data/Stormtrooper.jpg&#39;</span><span class="p">))</span> <span class="c1">#Create shape image for wordclouds</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="c1">#Plotting the word cloud</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">24</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">most_common_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">wordcloud</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">collocations</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="n">col_word</span><span class="p">[</span><span class="n">a</span><span class="p">],</span>\
-             <span class="n">max_font_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">relative_scaling</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">max_words</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> 
-        <span class="n">width</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">)</span><span class="o">.</span><span class="n">generate_from_frequencies</span><span class="p">(</span><span class="n">most_common_dict</span><span class="p">[</span><span class="n">attribute</span><span class="p">])</span>
-        
-        <span class="n">a</span><span class="o">+=</span><span class="mi">1</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">wordcloud</span><span class="p">,</span><span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
-        <span class="n">attribute_clean</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">attribute</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.txt&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">attribute_clean</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">wordcloud</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="cell tag_remove-input docutils container">
 </div>
 </div>
 <div class="tex2jax_ignore mathjax_ignore section" id="word-clouds">
 <h1>Word clouds<a class="headerlink" href="#word-clouds" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="word-clouds-for-anakin-darth-vader-based-on-movies-scripts">
 <h2>Word clouds for Anakin/Darth Vader based on movies scripts<a class="headerlink" href="#word-clouds-for-anakin-darth-vader-based-on-movies-scripts" title="Permalink to this headline">¶</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wnl</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">WordNetLemmatizer</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\(|\)&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s&#39;</span><span class="p">,</span><span class="n">name</span><span class="p">):</span>
-            <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
-
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;===.*?===&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span> <span class="c1"># removes paterns</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;==.*?==&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span> 
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\{\{.*?\}\}&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
-
-    <span class="n">tokens</span> <span class="o">=</span> <span class="n">word_tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="c1"># tokennizing the text</span>
-    <span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">wnl</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">w</span><span class="o">.</span><span class="n">isalpha</span><span class="p">())]</span> <span class="c1">#changes to lower case and removes unwanted types</span>
-
-    <span class="n">final_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">]</span> <span class="c1">#removing words under length 4</span>
-    <span class="k">return</span> <span class="n">final_words</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">first_trilogy_script</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="c1">#Read txt file that contains the dialogue</span>
-
-    <span class="c1">#Filtering</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">\n</span><span class="se">\\</span><span class="s1">\n&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span> <span class="c1">#some scripts have \ for every new line</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">\n&#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span> <span class="c1"># same as above</span>
-    <span class="n">sw</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(?=.*:).*(?=\n\n)&#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span> <span class="c1"># a dialogue pattern is name: dialogue</span>
-    <span class="n">sw</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">sw</span><span class="p">]</span> <span class="c1">#substituting multiple whitespace with one</span>
-
-    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;(.*)(?=:)&#39;</span><span class="p">,</span><span class="n">elem</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">sw</span><span class="p">]</span> <span class="c1"># find all the names pattern is name: </span>
-    <span class="n">names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="c1"># only getting unique names</span>
-    
-    <span class="c1"># Create df with names and their dialogues</span>
-    <span class="n">sw_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">names</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">],</span> <span class="n">index</span> <span class="o">=</span> <span class="n">names</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">sw_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(?&lt;=&#39;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;:).*(?=\n\n)&#39;</span> <span class="c1">#finding character specific dialogue</span>
-        <span class="n">row</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span><span class="n">text</span><span class="p">))</span> <span class="c1">#adding it as a single string</span>
-
-    <span class="n">sw_df</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sw_df</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">clean_text</span><span class="p">)</span> <span class="c1">#adding a cleaned version </span>
-    
-    <span class="k">return</span> <span class="n">sw_df</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sw1_df</span> <span class="o">=</span> <span class="n">first_trilogy_script</span><span class="p">(</span><span class="s1">&#39;data/script/Star Wars Episode I - The Phantom Menace.txt&#39;</span><span class="p">)</span>
-<span class="n">sw2_df</span> <span class="o">=</span> <span class="n">first_trilogy_script</span><span class="p">(</span><span class="s1">&#39;data/script/Star Wars- Episode II - Attack of the Clones.txt&#39;</span><span class="p">)</span>
-<span class="n">sw3_df</span> <span class="o">=</span> <span class="n">first_trilogy_script</span><span class="p">(</span><span class="s1">&#39;data/script/Star Wars- Episode III - Revenge of the Sith.txt&#39;</span><span class="p">)</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create function that filters the dialogues</span>
-<span class="k">def</span> <span class="nf">create_df_SW_OR</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-    <span class="n">dia</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span> <span class="c1"># the path to find the scripts</span>
-    <span class="n">list_char_IV</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">list_diag_IV</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dia</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span> <span class="c1"># we itterate through one dialogue/line at a time.</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
-        <span class="n">text_split</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span> <span class="c1"># splitting by &quot; to get character and dialogue the format is &quot;character&quot; &quot;dialogue&quot;</span>
-
-        <span class="c1"># Add to list the character</span>
-        <span class="n">list_char_IV</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text_split</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># 1st element is name</span>
-
-        <span class="c1"># Add to daiglog of the character</span>
-        <span class="n">list_diag_IV</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_split</span><span class="p">[</span><span class="mi">3</span><span class="p">:]))</span> <span class="c1"># 3rd element and onwrads is dialogue</span>
-
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Character&#39;</span><span class="p">:</span> <span class="n">list_char_IV</span><span class="p">,</span> <span class="s1">&#39;Dialogue&#39;</span><span class="p">:</span> <span class="n">list_diag_IV</span><span class="p">})</span>
-    <span class="k">return</span> <span class="n">df</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">star_wars_IV_df</span> <span class="o">=</span> <span class="n">create_df_SW_OR</span><span class="p">(</span><span class="s1">&#39;data/script/SW_EpisodeIV.txt&#39;</span><span class="p">)</span>
-<span class="n">star_wars_V_df</span> <span class="o">=</span> <span class="n">create_df_SW_OR</span><span class="p">(</span><span class="s1">&#39;data/script/SW_EpisodeV.txt&#39;</span><span class="p">)</span>
-<span class="n">star_wars_VI_df</span> <span class="o">=</span> <span class="n">create_df_SW_OR</span><span class="p">(</span><span class="s1">&#39;data/script/SW_EpisodeVI.txt&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create dataframe for each character </span>
-<span class="k">def</span> <span class="nf">aug_df_SW</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
-    <span class="n">name_unqiue</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Character&#39;</span><span class="p">])</span> <span class="c1">#finding the unique names in our dialogue dataframe</span>
-    <span class="n">list_name</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">list_dia</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">name_unqiue</span><span class="p">:</span> 
-        <span class="n">list_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-        <span class="n">list_dia</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clean_text</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Character&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">][</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)))</span> <span class="c1"># taking every row equal to the given name</span>
-        
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Character&#39;</span><span class="p">:</span> <span class="n">list_name</span><span class="p">,</span> <span class="s1">&#39;Dialogue&#39;</span><span class="p">:</span> <span class="n">list_dia</span><span class="p">})</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">star_wars_IV_df1</span> <span class="o">=</span> <span class="n">aug_df_SW</span><span class="p">(</span><span class="n">star_wars_IV_df</span><span class="p">)</span>
-<span class="n">star_wars_V_df1</span> <span class="o">=</span> <span class="n">aug_df_SW</span><span class="p">(</span><span class="n">star_wars_V_df</span><span class="p">)</span>
-<span class="n">star_wars_VI_df1</span> <span class="o">=</span> <span class="n">aug_df_SW</span><span class="p">(</span><span class="n">star_wars_VI_df</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">anakin_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">((</span><span class="s1">&#39;Star Wars Episode 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Star Wars Episode 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Star Wars Episode 3&#39;</span><span class="p">),</span>
-                   <span class="p">(</span><span class="n">sw1_df</span><span class="p">[</span><span class="s2">&quot;clean_text&quot;</span><span class="p">][</span><span class="s1">&#39;ANAKIN&#39;</span><span class="p">],</span> 
-                    <span class="n">sw2_df</span><span class="p">[</span><span class="s2">&quot;clean_text&quot;</span><span class="p">][</span><span class="s1">&#39;ANAKIN&#39;</span><span class="p">],</span> 
-                    <span class="n">sw3_df</span><span class="p">[</span><span class="s2">&quot;clean_text&quot;</span><span class="p">][</span><span class="s1">&#39;ANAKIN&#39;</span><span class="p">])))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">create_wordclouds</span><span class="p">(</span><span class="n">anakin_dict</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
-<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span><span class="o">/</span><span class="n">ipykernel_1924</span><span class="o">/</span><span class="mf">1899327667.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span><span class="o">/</span><span class="n">ipykernel_6916</span><span class="o">/</span><span class="mf">1899327667.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">create_wordclouds</span><span class="p">(</span><span class="n">anakin_dict</span><span class="p">)</span>
 
-<span class="nn">~\AppData\Local\Temp/ipykernel_1924/2765383741.py</span> in <span class="ni">create_wordclouds</span><span class="nt">(data)</span>
+<span class="nn">~\AppData\Local\Temp/ipykernel_6916/2765383741.py</span> in <span class="ni">create_wordclouds</span><span class="nt">(data)</span>
 <span class="g g-Whitespace">     </span><span class="mi">34</span>     <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">most_common_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
 <span class="g g-Whitespace">     </span><span class="mi">35</span>         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 <span class="ne">---&gt; </span><span class="mi">36</span>         <span class="n">wordcloud</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">collocations</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="n">col_word</span><span class="p">[</span><span class="n">a</span><span class="p">],</span>\
@@ -582,89 +377,36 @@
 <span class="ne">ImportError</span>: The _imagingft C module is not installed
 </pre></div>
 </div>
-<img alt="_images/Page_Script_13_1.png" src="_images/Page_Script_13_1.png" />
+<img alt="_images/Page_Script_14_1.png" src="_images/Page_Script_14_1.png" />
 </div>
 </div>
 <p>We see on Anakin’s word cloud from the second movie, words that describe his love for Padme such as ‘alive’ and ‘nervous’. The word ‘mom’ shows us how much he misses his mother in the second movie.</p>
 <p>Also in the third movie, we can see more political words such as the ‘senate’, ‘Jedi council’, ‘war’, and ‘Chancellor’ (referring to Chancellor Palpatine).</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vader_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">((</span><span class="s1">&#39;Episode 4&#39;</span><span class="p">,</span><span class="s1">&#39;Episode 5&#39;</span><span class="p">,</span><span class="s1">&#39;Episode 6&#39;</span><span class="p">),</span>
-                   <span class="p">([</span><span class="n">word</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">star_wars_IV_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">][</span><span class="n">star_wars_IV_df1</span><span class="p">[</span><span class="s1">&#39;Character&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;VADER&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">],</span> 
-                    <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">star_wars_V_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">][</span><span class="n">star_wars_V_df1</span><span class="p">[</span><span class="s1">&#39;Character&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;VADER&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">],</span> 
-                    <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">star_wars_VI_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">][</span><span class="n">star_wars_VI_df1</span><span class="p">[</span><span class="s1">&#39;Character&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;VADER&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">])))</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">create_wordclouds</span><span class="p">(</span><span class="n">vader_dict</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/Page_Script_16_0.png" src="_images/Page_Script_16_0.png" />
+<img alt="_images/Page_Script_17_0.png" src="_images/Page_Script_17_0.png" />
 </div>
 </div>
 <p>For the sixth movie, we can see important words for the movie plot such as ‘emperor’, ‘lightsaber’, ‘dark side’, and ‘sister’.</p>
 <p>Also in the fifth movie, we observe that the word ‘join’ appears (from the famous sentence “join the dark side”) and the most valuable word for the trilogy is ‘father’.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#We create a list of words from Anakin&#39;s dialogue from the prequel trilogy</span>
-<span class="n">anakin_dialogue</span> <span class="o">=</span> <span class="n">sw1_df</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">][</span><span class="s1">&#39;ANAKIN&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">sw2_df</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">][</span><span class="s1">&#39;ANAKIN&#39;</span><span class="p">]</span><span class="o">+</span> <span class="n">sw3_df</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">][</span><span class="s1">&#39;ANAKIN&#39;</span><span class="p">]</span>
-
-<span class="c1">#We create a list of words from Anakin&#39;s dialogue from the original trilogy</span>
-<span class="n">vader_dialogue</span> <span class="o">=</span> <span class="n">star_wars_IV_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">][</span><span class="n">star_wars_IV_df1</span><span class="p">[</span><span class="s1">&#39;Character&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;VADER&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>\
-     <span class="o">+</span> <span class="n">star_wars_V_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">][</span><span class="n">star_wars_V_df1</span><span class="p">[</span><span class="s1">&#39;Character&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;VADER&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>\
-         <span class="o">+</span> <span class="n">star_wars_VI_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">][</span><span class="n">star_wars_VI_df1</span><span class="p">[</span><span class="s1">&#39;Character&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;VADER&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="c1">#Above we create a dictionary of both lists from above as values</span>
-<span class="n">anakin_vader_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Anakin Skywalker&#39;</span><span class="p">:</span><span class="n">anakin_dialogue</span><span class="p">,</span> <span class="s1">&#39;Darth Vader&#39;</span><span class="p">:</span><span class="n">vader_dialogue</span><span class="p">}</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">create_wordclouds</span><span class="p">(</span><span class="n">anakin_vader_dict</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/Page_Script_19_0.png" src="_images/Page_Script_19_0.png" />
+<img alt="_images/Page_Script_20_0.png" src="_images/Page_Script_20_0.png" />
 </div>
 </div>
 <p>By comparing Anakin to Darth Vader we can see a lot of descriptive words for example ‘Padme’ and ‘right’ which stem from Anakin trying to question if what he does is right. Then words such as ‘sorry’ and ‘mother’ create a more emotional thus human aspect to the character, but for Darth Vader’s word cloud there are words such as ‘emperor’, ‘destiny’, ‘rebels fighter’, and ‘rebellion’. His descriptive words have changed a lot after his transformation to the dark side. Also the word ‘Luke’ appears on Darth Vader’s wordcloud which is his son (spoiler alert).</p>
 </div>
 <div class="section" id="word-clouds-for-the-two-trilogies-based-on-movies-scripts">
 <h2>Word clouds for the two trilogies based on movies scripts<a class="headerlink" href="#word-clouds-for-the-two-trilogies-based-on-movies-scripts" title="Permalink to this headline">¶</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#We create a list with all the dialogues from Prequel Trilogy</span>
-<span class="n">original_dialogue</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sw1_df</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]))</span>\
-    <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sw2_df</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]))</span>\
-        <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sw3_df</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]))</span>
-
-<span class="c1">#We create a list with all the dialogues from Original Trilogy</span>
-<span class="n">prequel_dialogue</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">star_wars_IV_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]))</span>\
-     <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">star_wars_V_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]))</span>\
-         <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">star_wars_VI_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]))</span>
-
-<span class="c1">#Dictionary with the lists above as values</span>
-<span class="n">original_prequel_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Original Trilogy&#39;</span><span class="p">:</span><span class="n">original_dialogue</span><span class="p">,</span> <span class="s1">&#39;Prequel Trilogy&#39;</span><span class="p">:</span><span class="n">prequel_dialogue</span><span class="p">}</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">create_wordclouds</span><span class="p">(</span><span class="n">original_prequel_dict</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/Page_Script_23_0.png" src="_images/Page_Script_23_0.png" />
+<img alt="_images/Page_Script_24_0.png" src="_images/Page_Script_24_0.png" />
 </div>
 </div>
 <p>We observe for the first wordcloud some descriptive words (of the trilogy plot) such as ‘Chancellor’, ‘Padme’, and the battle of ‘Geonosis’.</p>
@@ -676,88 +418,11 @@
 <div class="section" id="part-3-5-1-analysis-of-wikipage">
 <h2>Part 3.5.1: Analysis of Wikipage<a class="headerlink" href="#part-3-5-1-analysis-of-wikipage" title="Permalink to this headline">¶</a></h2>
 <p><a id='S_wiki.'></a></p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the LabMT data and convert to dictionary</span>
-<span class="n">LabMT_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/labMT.txt&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">word_list_LabMT</span> <span class="o">=</span> <span class="n">LabMT_df</span><span class="p">[</span><span class="s1">&#39;word&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="n">LabMT_dict</span> <span class="o">=</span> <span class="n">LabMT_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;word&#39;</span><span class="p">)[</span><span class="s1">&#39;happiness_average&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-
-<span class="c1"># VADER form the vaderSentiment library</span>
-<span class="n">analyzer</span> <span class="o">=</span> <span class="n">SentimentIntensityAnalyzer</span><span class="p">()</span>
-
-<span class="c1">## Load the wiki page for each character and save in a dictionary </span>
-<span class="n">wiki</span> <span class="o">=</span> <span class="p">{}</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define function for compute LabMT sentiment for a text</span>
-<span class="k">def</span> <span class="nf">compute_avg_sentiment_LabMT</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-    <span class="c1"># Join all sentences to one string</span>
-
-    <span class="c1"># Clean text </span>
-    <span class="n">words_final</span> <span class="o">=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-    
-    <span class="c1"># Initialization to store values</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="c1"># Using freqDist to only loop over unique words </span>
-    <span class="n">fdist</span> <span class="o">=</span> <span class="n">FreqDist</span><span class="p">(</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words_final</span><span class="p">)</span>
-    <span class="n">word_unique</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">fdist</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
-    <span class="n">word_fre</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fdist</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
-
-    <span class="c1"># Loop over words </span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fdist</span><span class="p">)):</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">word_unique</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">word_fre</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-        <span class="c1"># Get the LabMT score</span>
-        <span class="n">S_v</span> <span class="o">=</span> <span class="n">LabMT_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-
-        <span class="c1"># Weight the socre by the frequency</span>
-        <span class="k">if</span> <span class="n">S_v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">s</span> <span class="o">+=</span> <span class="n">f</span> <span class="o">*</span> <span class="n">LabMT_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">n</span> <span class="o">+=</span> <span class="n">f</span>
-            
-    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="k">return</span> <span class="n">s</span><span class="o">/</span><span class="n">n</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define function for compute sentiment for a text</span>
-<span class="k">def</span> <span class="nf">compute_avg_sentiment_VADER</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mi">0</span>
-    
-    <span class="c1"># Convert the text file to the right format, where each line is a  new element</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
-
-    <span class="c1"># Initialzation </span>
-    <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">len_VADER</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="c1"># Compute polarity for each sentence in text </span>
-    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">sentence</span><span class="p">:</span>
-            <span class="n">vs</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">polarity_scores</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span>
-            <span class="n">s</span> <span class="o">+=</span> <span class="n">vs</span><span class="p">[</span><span class="s1">&#39;compound&#39;</span><span class="p">]</span>
-            <span class="n">len_VADER</span> <span class="o">+=</span> <span class="mi">1</span>
-            
-    <span class="c1"># Retur the average polarity</span>
-    <span class="k">return</span> <span class="n">s</span><span class="o">/</span><span class="n">len_VADER</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 </div>
 </div>
 <div class="section" id="analysis-of-movie-scipts">
@@ -766,95 +431,14 @@
 <div class="section" id="loading-the-scripts">
 <h3>Loading the scripts<a class="headerlink" href="#loading-the-scripts" title="Permalink to this headline">¶</a></h3>
 <p>Original trilogy movie scripts are from <a class="reference external" href="https://github.com/kamran786/Star-Wars-Movie-Scripts-Text-Analysis">github</a>.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define function to load script of the original trilogy </span>
-<span class="k">def</span> <span class="nf">create_df_SW_OR</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-
-    <span class="c1"># Load txt file</span>
-    <span class="n">dia</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Initilaize list for the character and dialouge </span>
-    <span class="n">list_char_IV</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">list_diag_IV</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="c1"># Loop over all rows in data </span>
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dia</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">text_split</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
-
-        <span class="c1"># Add character speaking to list</span>
-        <span class="n">list_char_IV</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text_split</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
-        <span class="c1"># Add daiglog to list</span>
-        <span class="n">list_diag_IV</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_split</span><span class="p">[</span><span class="mi">3</span><span class="p">:]))</span>
-
-    <span class="c1"># Create dataframe </span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Character&#39;</span><span class="p">:</span> <span class="n">list_char_IV</span><span class="p">,</span> <span class="s1">&#39;Dialogue&#39;</span><span class="p">:</span> <span class="n">list_diag_IV</span><span class="p">})</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Sentiment_LabMT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_avg_sentiment_LabMT</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Sentiment_VADER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_avg_sentiment_VADER</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">df</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 </div>
 <p>Prequal movie scripts are from <a class="reference external" href="https://www.actorpoint.com/movie-scripts/scripts/star-wars-the-phantom-menace.html">script_I</a>, <a class="reference external" href="http://sellascript.com/Source/resources/screenplays/attackoftheclones.htm">script_II</a>, and <a class="reference external" href="https://www.actorpoint.com/movie-scripts/scripts/star-wars-revenge-of-the-sith.html">script_III</a>.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_df_SW_PREQUAL</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-
-    <span class="c1"># Open file </span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    
-    <span class="c1"># remove newlines </span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">\n</span><span class="se">\\</span><span class="s1">\n&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">\n&#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\(.*\)&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
-
-    <span class="c1"># Finding the correct format for the dialogues</span>
-    <span class="n">sw1</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(?=.*:).*(?=\n\n)&#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
-    <span class="n">sw1</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">sw1</span><span class="p">]</span>
-
-    <span class="c1"># Loop through all dialogues and add the speaking character and dialogue</span>
-    <span class="n">list_char</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">list_dia</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">sw1</span><span class="p">:</span>
-        <span class="n">split_text</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
-        <span class="n">list_char</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">split_text</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">list_dia</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">split_text</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
-    
-    <span class="c1"># Create dataframe and compute sentiment </span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Character&#39;</span> <span class="p">:</span> <span class="n">list_char</span><span class="p">,</span> <span class="s1">&#39;Dialogue&#39;</span> <span class="p">:</span> <span class="n">list_dia</span><span class="p">})</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Sentiment_LabMT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_avg_sentiment_LabMT</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Sentiment_VADER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_avg_sentiment_VADER</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">df</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the script for the original trilogy</span>
-<span class="n">star_wars_IV_df</span> <span class="o">=</span> <span class="n">create_df_SW_OR</span><span class="p">(</span><span class="s1">&#39;data/script/SW_EpisodeIV.txt&#39;</span><span class="p">)</span>
-<span class="n">star_wars_V_df</span> <span class="o">=</span> <span class="n">create_df_SW_OR</span><span class="p">(</span><span class="s1">&#39;data/script/SW_EpisodeV.txt&#39;</span><span class="p">)</span>
-<span class="n">star_wars_VI_df</span> <span class="o">=</span> <span class="n">create_df_SW_OR</span><span class="p">(</span><span class="s1">&#39;data/script/SW_EpisodeVI.txt&#39;</span><span class="p">)</span>
-
-<span class="c1"># Load the scripts for the prequals </span>
-<span class="n">star_wars_I_df</span> <span class="o">=</span> <span class="n">create_df_SW_PREQUAL</span><span class="p">(</span><span class="s1">&#39;data/script/Star Wars Episode I - The Phantom Menace.txt&#39;</span><span class="p">)</span>
-<span class="n">star_wars_II_df</span> <span class="o">=</span> <span class="n">create_df_SW_PREQUAL</span><span class="p">(</span><span class="s1">&#39;data/script/Star Wars- Episode II - Attack of the Clones.txt&#39;</span><span class="p">)</span>
-<span class="n">star_wars_III_df</span> <span class="o">=</span> <span class="n">create_df_SW_PREQUAL</span><span class="p">(</span><span class="s1">&#39;data/script/Star Wars- Episode III - Revenge of the Sith.txt&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">star_wars_V_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_html"><div>
 <style scoped>
@@ -920,97 +504,24 @@
 </table>
 </div></div></div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create dataframe for all movies </span>
-<span class="n">SW_script_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">star_wars_I_df</span><span class="p">,</span> <span class="n">star_wars_II_df</span><span class="p">,</span> <span class="n">star_wars_III_df</span><span class="p">,</span> <span class="n">star_wars_IV_df</span><span class="p">,</span> <span class="n">star_wars_V_df</span><span class="p">,</span> <span class="n">star_wars_VI_df</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-
-<span class="c1">## Saving index for where the movies shift for later plot</span>
-<span class="n">index_II</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">star_wars_I_df</span><span class="p">)</span>
-<span class="n">index_III</span> <span class="o">=</span> <span class="n">index_II</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">star_wars_II_df</span><span class="p">)</span> 
-<span class="n">index_IV</span> <span class="o">=</span> <span class="n">index_III</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">star_wars_III_df</span><span class="p">)</span> 
-<span class="n">index_V</span> <span class="o">=</span> <span class="n">index_IV</span> <span class="o">+</span>  <span class="nb">len</span><span class="p">(</span><span class="n">star_wars_VI_df</span><span class="p">)</span> 
-<span class="n">index_VI</span> <span class="o">=</span> <span class="n">index_V</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">star_wars_V_df</span><span class="p">)</span> 
-<span class="n">index_All</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_II</span><span class="p">,</span> <span class="n">index_III</span><span class="p">,</span> <span class="n">index_IV</span><span class="p">,</span> <span class="n">index_V</span><span class="p">,</span> <span class="n">index_VI</span><span class="p">]</span>
-<span class="n">movies_index</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;SW_I&#39;</span><span class="p">,</span> <span class="s1">&#39;SW_II&#39;</span><span class="p">,</span> <span class="s1">&#39;SW_III&#39;</span><span class="p">,</span> <span class="s1">&#39;SW_IV&#39;</span><span class="p">,</span> <span class="s1">&#39;SW_V&#39;</span><span class="p">,</span> <span class="s1">&#39;SW_VI&#39;</span><span class="p">]</span>
-<span class="n">color_movie</span> <span class="o">=</span> <span class="p">[</span> <span class="s1">&#39;hotpink&#39;</span><span class="p">,</span> <span class="s1">&#39;darkorchid&#39;</span><span class="p">,</span> <span class="s1">&#39;indigo&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;darkgreen&#39;</span><span class="p">,</span> <span class="s1">&#39;olive&#39;</span><span class="p">]</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot sentiment as timeseries</span>
-<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">SW_script_df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">SW_script_df</span><span class="p">[</span><span class="s1">&#39;Sentiment_LabMT&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Sentiment LabMT&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;steelblue&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">9</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sentiment score&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of dialogue&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Timeseries of sentiments using LabMT&#39;</span><span class="p">)</span>
-<span class="c1"># Add the movie indications </span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">index_All</span><span class="p">,</span> <span class="n">movies_index</span><span class="p">,</span> <span class="n">color_movie</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Movie: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span><span class="mf">0.77</span><span class="p">))</span>
-
-
-<span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">SW_script_df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">SW_script_df</span><span class="p">[</span><span class="s1">&#39;Sentiment_VADER&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkred&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Sentiment VADER&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sentiment score&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of dialogue&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Timeseries of sentiments using VADER&#39;</span><span class="p">)</span>
-<span class="c1"># Add the movie indications </span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">index_All</span><span class="p">,</span> <span class="n">movies_index</span><span class="p">,</span> <span class="n">color_movie</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Movie: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span><span class="mf">0.77</span><span class="p">))</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/Page_Script_38_0.png" src="_images/Page_Script_38_0.png" />
+<img alt="_images/Page_Script_39_0.png" src="_images/Page_Script_39_0.png" />
 </div>
 </div>
 <p>We have plotted the sentiment scores as a time series based on when the dialogue appears in all the movies. This plot is created in chronological order meaning the prequel movies come before the original movies.<br />
 From the plot, we see that the sentiment varies a lot. We cannot see any clear indications of a large period of time where characters are happy or sad.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot distirubtion of sentiment </span>
-<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">SW_script_df</span><span class="p">[</span><span class="s1">&#39;Sentiment_LabMT&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">rwidth</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;steelblue&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Histogram for sentiments using LabMT&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sentiment score&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">9</span><span class="p">])</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">SW_script_df</span><span class="p">[</span><span class="s1">&#39;Sentiment_VADER&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">rwidth</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkred&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Histogram for sentiments using VADER&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sentiment score&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/Page_Script_40_0.png" src="_images/Page_Script_40_0.png" />
+<img alt="_images/Page_Script_41_0.png" src="_images/Page_Script_41_0.png" />
 </div>
 </div>
 <p>Above we have the distribution plot for the sentiment using the two methods. We see that for both methods we have scored across the whole range, but for both methods majority of the dialogues are categorized as neutral.</p>
 <div class="section" id="character-based-analysis">
 <h4>Character based analysis<a class="headerlink" href="#character-based-analysis" title="Permalink to this headline">¶</a></h4>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SW_script_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Character&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;Sentiment_LabMT&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;Sentiment_VADER&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">})</span>\
-    <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_html"><div>
 <style scoped>
@@ -1107,68 +618,20 @@ From the plot, we see that the sentiment varies a lot. We cannot see any clear i
 </div></div></div>
 </div>
 <p>We can see the top 10 characters with most dialogues for both methods have an average sentiment of around 5 and 0 respectively to LabMT and VADER, which are categorized as neutral.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">time_sentiment</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">name_list</span><span class="p">):</span>
-    <span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="c1"># Plot for LabMT</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">set_palette</span><span class="p">(</span><span class="s2">&quot;Set1&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">name_list</span><span class="p">:</span>
-        <span class="n">df_temp</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Character&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">name</span><span class="p">]</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_temp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">df_temp</span><span class="p">[</span><span class="s1">&#39;Sentiment_LabMT&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="n">name</span><span class="p">)</span>
-    <span class="c1"># Add the movie indications </span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">index_All</span><span class="p">,</span> <span class="n">movies_index</span><span class="p">,</span> <span class="n">color_movie</span><span class="p">):</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Movie: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span><span class="mf">0.77</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sentiment score&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of dialogue&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">9</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Timeseries of sentiments for&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name_list</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;using LabMT&#39;</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-    <span class="c1"># Plot for VADER</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">set_palette</span><span class="p">(</span><span class="s2">&quot;Set2&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">name_list</span><span class="p">:</span>
-        <span class="n">df_temp</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Character&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">name</span><span class="p">]</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_temp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">df_temp</span><span class="p">[</span><span class="s1">&#39;Sentiment_VADER&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="n">name</span><span class="p">)</span>
-    <span class="c1"># Add the movie indications </span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">index_All</span><span class="p">,</span> <span class="n">movies_index</span><span class="p">,</span> <span class="n">color_movie</span><span class="p">):</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Movie: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span><span class="mf">0.77</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sentiment score&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of dialogue&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Timeseries of sentiments for &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name_list</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; using VADER&#39;</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 </div>
 <p>From the word cloud we found that Anakin Skywalker (Darth Vader) had an interesting shift in the type of word occurring based on the movies. We will see if we can see a similar tendency in the sentiment based on the dialogues spoken by him. Additionaly, as previously mentioned he shifts form the light side to the dark side, thus we whish to see if this can be seen in the sentiment.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_sentiment</span><span class="p">(</span><span class="n">SW_script_df</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ANAKIN&#39;</span><span class="p">,</span><span class="s1">&#39;VADER&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/Page_Script_47_0.png" src="_images/Page_Script_47_0.png" />
+<img alt="_images/Page_Script_48_0.png" src="_images/Page_Script_48_0.png" />
 </div>
 </div>
 <p>From the plot above we see on the left-hand side, that there is no clear tendency using LabMT. For the VADER plot on the right, we see that in the second movie Anakin in the beginning primarily have a more positive sentiment. From the world clouds in section 4.2 positive words occurs such as ‘alive’ and ‘laughing’. We know form the movies that he is in love at that time.</p>
 <p>But from the plot we also see a tendency towards positive in the second half of the third movie. From watching the movie, we know that this is where he is questioning himself and turning to the dark side. This contradicts with the sentiment, since you would imagine someone in question of his existence will not use a lot of words which are positive. This could also mean that the reason for the positive tendency in the second movie could be a coincidence.</p>
 <p>We will look at Yoda’s sentiment timeseries plot to see if the sentiment also varies.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_sentiment</span><span class="p">(</span><span class="n">SW_script_df</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;YODA&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="_images/Page_Script_49_0.png" src="_images/Page_Script_49_0.png" />
+<img alt="_images/Page_Script_50_0.png" src="_images/Page_Script_50_0.png" />
 </div>
 </div>
 <p>From the plot for Yoda, we again see that there are a lot of variation in the tendency which is unexpected, since Yoda is supposed to be a wise character. Additionally, as a jedi you are supposed to be neutral. These traits can not be seen in plot.</p>
@@ -1182,29 +645,9 @@ From the plot, we see that the sentiment varies a lot. We cannot see any clear i
 <div class="section" id="part-3-6-1-movie-scipts">
 <h3>Part 3.6.1: Movie Scipts<a class="headerlink" href="#part-3-6-1-movie-scipts" title="Permalink to this headline">¶</a></h3>
 <p><a id='htm_script.'></a></p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">list_of_scripts</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sw1_df</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">])),</span>
-<span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sw2_df</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">])),</span>
-<span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sw3_df</span><span class="p">[</span><span class="s1">&#39;clean_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">])),</span>
-<span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">star_wars_IV_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">])),</span>
-<span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">star_wars_V_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">])),</span>
-<span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">star_wars_VI_df1</span><span class="p">[</span><span class="s1">&#39;Dialogue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]))]</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">id2word</span> <span class="o">=</span> <span class="n">corpora</span><span class="o">.</span><span class="n">Dictionary</span><span class="p">(</span><span class="n">list_of_scripts</span><span class="p">)</span> <span class="c1"># creating dictionary</span>
-
-<span class="n">common_corpus</span> <span class="o">=</span> <span class="p">[</span><span class="n">id2word</span><span class="o">.</span><span class="n">doc2bow</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">list_of_scripts</span><span class="p">]</span> <span class="c1"># maping to index</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">gensim</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">(</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">common_corpus</span><span class="p">,</span> <span class="n">id2word</span> <span class="o">=</span> <span class="n">id2word</span><span class="p">,</span> <span class="n">num_topics</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">chunksize</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">#building model</span>
-<span class="n">model</span><span class="o">.</span><span class="n">show_topics</span><span class="p">(</span><span class="n">num_topics</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">num_words</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span> <span class="c1"># printing out the words for the topics</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(0,
   &#39;0.006*&quot;jedi&quot; + 0.005*&quot;master&quot; + 0.004*&quot;anakin&quot; + 0.003*&quot;know&quot; + 0.003*&quot;must&quot; + 0.003*&quot;council&quot; + 0.003*&quot;going&quot; + 0.003*&quot;right&quot;&#39;),
@@ -1224,16 +667,7 @@ From the plot, we see that the sentiment varies a lot. We cannot see any clear i
 </div>
 <p>With this topic modelling we see some clear topic-movie correlation. For topic 0 we have ‘princess’ and ‘uncle’ which are specific to the 4th movie. For topic 4 we see ‘father’ and ‘sister’ which is also specific to movie 6. But we there are also problems, looking at topic 3 Luke and Anaking are only mentioned together in the 6th movie, but we already assigned topic 4 to movie 6. Additionaly the words have small weight and are thus not descriptive of the topic.</p>
 <p>When mapping the topics with PCA we also see this problem:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">temp</span> <span class="o">=</span> <span class="n">pyLDAvis</span><span class="o">.</span><span class="n">gensim_models</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">topic_model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="n">common_corpus</span><span class="p">,</span> <span class="n">dictionary</span><span class="o">=</span><span class="n">id2word</span><span class="p">)</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
-<span class="n">pyLDAvis</span><span class="o">.</span><span class="n">enable_notebook</span><span class="p">()</span>
-<span class="n">pyLDAvis</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_html">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bmabey/pyLDAvis@3.3.1/pyLDAvis/js/ldavis.v1.0.0.css">
@@ -1283,13 +717,7 @@ if(typeof(LDAvis) !== "undefined"){
 <li><p>It’s an unsupervised model and thus the result will differ everytime, which is why we set the random_state. This also means it’s probably possible to create 6 clearly different topics for the 6 movies, but statistically it will be unlikely because</p></li>
 <li><p>the movies are very similar. They are all from the same cinematic universe and movies 4 and 6 had the same plot of destroying the death star. Additionaly, the main characters are the same in the sequal, and in the prequals.</p></li>
 </ol>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">gensim</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">(</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">common_corpus</span><span class="p">,</span> <span class="n">id2word</span> <span class="o">=</span> <span class="n">id2word</span><span class="p">,</span> <span class="n">num_topics</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">chunksize</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="c1">#building model</span>
-<span class="n">model</span><span class="o">.</span><span class="n">show_topics</span><span class="p">(</span><span class="n">num_topics</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_words</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span> <span class="c1"># printing out the words for the topics</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(0,
   &#39;0.011*&quot;jedi&quot; + 0.010*&quot;master&quot; + 0.010*&quot;right&quot; + 0.010*&quot;father&quot; + 0.010*&quot;know&quot; + 0.008*&quot;good&quot; + 0.008*&quot;well&quot; + 0.007*&quot;going&quot;&#39;),
@@ -1301,22 +729,7 @@ if(typeof(LDAvis) !== "undefined"){
 </div>
 <p>Luke, father, and Chewie are from the sequals, thus the hidden topic modeling is still not capturing prequals/sequals.</p>
 <p>Finally, we’ll do a hidden topic analyses for each movie sepperately:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
-
-<span class="k">for</span> <span class="n">movie</span> <span class="ow">in</span> <span class="n">list_of_scripts</span><span class="p">:</span>
-    <span class="n">id2word</span> <span class="o">=</span> <span class="n">corpora</span><span class="o">.</span><span class="n">Dictionary</span><span class="p">([</span><span class="n">movie</span><span class="p">])</span> <span class="c1"># creating dictionary</span>
-
-    <span class="n">common_corpus</span> <span class="o">=</span> <span class="p">[</span><span class="n">id2word</span><span class="o">.</span><span class="n">doc2bow</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">[</span><span class="n">movie</span><span class="p">]]</span> <span class="c1"># maping to index</span>
-
-    <span class="n">model</span> <span class="o">=</span> <span class="n">gensim</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">(</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">common_corpus</span><span class="p">,</span> <span class="n">id2word</span> <span class="o">=</span> <span class="n">id2word</span><span class="p">,</span> <span class="n">num_topics</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">#building model</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Movie: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">show_topics</span><span class="p">(</span><span class="n">num_topics</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_words</span> <span class="o">=</span> <span class="mi">6</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1"># printing out the words for the topics</span>
-    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Movie: 1
 [(0, &#39;0.019*&quot;cont&quot; + 0.008*&quot;think&quot; + 0.008*&quot;master&quot; + 0.007*&quot;take&quot; + 0.007*&quot;know&quot; + 0.007*&quot;annie&quot;&#39;)]
